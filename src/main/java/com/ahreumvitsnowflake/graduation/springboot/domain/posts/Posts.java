@@ -16,6 +16,7 @@ public class Posts {
     // post 테이블 기본키(PK)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long id;
 
     // user 테이블의 user_id 참조키(FK)
@@ -29,7 +30,7 @@ public class Posts {
 
     // 테이블 칼럼 - 글귀 주제(사랑, 우정, 가족, 인생, 위로, 추억, 기타)
     @Column(length = 200, nullable = false)
-    private String phrase_topic;
+    private String phraseTopic;
 
     // 테이블 칼럼 - 작성자
     @Column(nullable = false)
@@ -41,19 +42,19 @@ public class Posts {
 
     // 테이블 칼럼 - '스크랩' 수
     @Column(columnDefinition = "integer default 0")
-    private int scrap_count;
+    private int scrapCount;
 
     // 테이블 칼럼 - 출처
     @Column(nullable = false)
     private String source;
 
     @Builder
-    public Posts(String category, String phrase_topic, String writer, String phrase, int scrap_count, String source){
+    public Posts(String category, String phraseTopic, String writer, String phrase, int scrapCount, String source){
         this.category = category;
-        this.phrase_topic = phrase_topic;
+        this.phraseTopic = phraseTopic;
         this.writer = writer;
         this.phrase = phrase;
-        this.scrap_count = scrap_count;
+        this.scrapCount = scrapCount;
         this.source = source;
     }
 }

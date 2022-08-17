@@ -26,14 +26,14 @@ public class PostsRepositoryTest {
     public void postsSave_Calling() { // 게시글저장_불러오기()
         //given
         String category = "카테고리";
-        String phrase_topic = "글귀 주제";
+        String phraseTopic = "글귀 주제";
         String writer = "작성자";
         String phrase = "글귀 내용";
         String source = "출처";
 
         postsRepository.save(Posts.builder()
                 .category(category)
-                .phrase_topic(phrase_topic)
+                .phraseTopic(phraseTopic)
                 .writer(writer)
                 .phrase(phrase)
                 .source(source)
@@ -44,7 +44,7 @@ public class PostsRepositoryTest {
         //then
         Posts posts = postsList.get(0);
         assertThat(posts.getCategory()).isEqualTo(category);
-        assertThat(posts.getPhrase_topic()).isEqualTo(phrase_topic);
+        assertThat(posts.getPhraseTopic()).isEqualTo(phraseTopic);
         assertThat(posts.getWriter()).isEqualTo(writer);
         assertThat(posts.getPhrase()).isEqualTo(phrase);
         assertThat(posts.getSource()).isEqualTo(source);

@@ -9,19 +9,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostsSaveRequestDto {
     private String category;
-    private String phrase_topic;
+    private String phraseTopic;
     private String writer;
     private String phrase;
-    private int scrap_count;
+    private int scrapCount;
     private String source;
 
     @Builder
-    public PostsSaveRequestDto(String category, String phrase_topic, String writer, String phrase, int scrap_count, String source){
+    public PostsSaveRequestDto(String category, String phraseTopic, String writer, String phrase, int scrapCount, String source){
         this.category = category;
-        this.phrase_topic = phrase_topic;
+        this.phraseTopic = phraseTopic;
         this.writer = writer;
         this.phrase = phrase;
-        this.scrap_count = scrap_count;
+        this.scrapCount = scrapCount;
         this.source = source;
     }
 
@@ -29,10 +29,10 @@ public class PostsSaveRequestDto {
     public Posts toEntity(){
         return Posts.builder()
                 .category(category)
-                .phrase_topic(phrase_topic)
+                .phraseTopic(phraseTopic)
                 .writer(writer)
                 .phrase(phrase)
-                .scrap_count(scrap_count)
+                .scrapCount(scrapCount)
                 .source(source)
                 .build();
     }

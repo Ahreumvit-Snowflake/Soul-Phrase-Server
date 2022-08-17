@@ -39,22 +39,22 @@ public class PostsApiControllerTest {
     public void posts_Saved() throws Exception { // posts_등록된다()
         //given
         String category = "category";
-        String phrase_topic = "phrase_topic";
+        String phraseTopic = "phrase_topic";
         String writer = "writer";
         String phrase = "phrase";
-        int scrap_count = 0;
+        int scrapCount = 0;
         String source = "source";
 
         PostsSaveRequestDto requestDto = PostsSaveRequestDto.builder()
                 .category(category)
-                .phrase_topic(phrase_topic)
+                .phraseTopic(phraseTopic)
                 .writer(writer)
                 .phrase(phrase)
-                .scrap_count(scrap_count)
+                .scrapCount(scrapCount)
                 .source(source)
                 .build();
 
-        String url = "http://localhost:" + port + "/api/posts";
+        String url = "http://localhost:" + port + "/api/v1/posts";
 
         //when
         ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, requestDto, Long.class);
@@ -65,10 +65,10 @@ public class PostsApiControllerTest {
 
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getCategory()).isEqualTo(category);
-        assertThat(all.get(0).getPhrase_topic()).isEqualTo(phrase_topic);
+        assertThat(all.get(0).getPhraseTopic()).isEqualTo(phraseTopic);
         assertThat(all.get(0).getWriter()).isEqualTo(writer);
         assertThat(all.get(0).getPhrase()).isEqualTo(phrase);
-        assertThat(all.get(0).getScrap_count()).isEqualTo(scrap_count);
+        assertThat(all.get(0).getScrapCount()).isEqualTo(scrapCount);
         assertThat(all.get(0).getSource()).isEqualTo(source);
     }
 }
