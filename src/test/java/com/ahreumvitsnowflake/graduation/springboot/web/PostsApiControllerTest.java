@@ -76,7 +76,7 @@ public class PostsApiControllerTest {
     }
 
     @Test
-    public void posts_Updated() throws Exception {
+    public void posts_Updated() throws Exception { // posts_수정된다()
         //given
         Posts savedPosts = postsRepository.save(Posts.builder()
                 .category("category")

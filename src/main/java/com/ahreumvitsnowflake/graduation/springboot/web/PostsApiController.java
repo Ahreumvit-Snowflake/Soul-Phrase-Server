@@ -22,9 +22,14 @@ public class PostsApiController {
         return postsService.update(id, requestDto);
     }
 
-    @GetMapping("/api/v1/posts/{id}") // 게시글 조회
-    public PostsResponseDto findById(@PathVariable Long id) {
+    @GetMapping("/api/v1/posts/{id}") // post_id로 게시글 조회
+    public PostsResponseDto findById(@PathVariable Long id){
         return postsService.findById(id);
     }
 
+    @DeleteMapping("/api/v1/posts/{id}") // post_id로 게시글 삭제
+    public Long delete(@PathVariable Long id){
+        postsService.delete(id);
+        return id;
+    }
 }
