@@ -1,5 +1,6 @@
 package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 
+import com.ahreumvitsnowflake.graduation.springboot.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="POST")
 @DynamicInsert
-public class Posts {
+public class Posts extends BaseTimeEntity {
     // post 테이블 기본키(PK)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,6 +51,15 @@ public class Posts {
 
     @Builder
     public Posts(String category, String phraseTopic, String writer, String phrase, int scrapCount, String source){
+        this.category = category;
+        this.phraseTopic = phraseTopic;
+        this.writer = writer;
+        this.phrase = phrase;
+        this.scrapCount = scrapCount;
+        this.source = source;
+    }
+
+    public void update(String category, String phraseTopic, String writer, String phrase, int scrapCount, String source){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;

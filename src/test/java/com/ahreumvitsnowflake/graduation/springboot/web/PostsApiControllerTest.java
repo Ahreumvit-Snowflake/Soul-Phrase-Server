@@ -3,6 +3,7 @@ package com.ahreumvitsnowflake.graduation.springboot.web;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PostsRepository;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
+import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsUpdateRequestDto;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -70,6 +73,51 @@ public class PostsApiControllerTest {
         assertThat(all.get(0).getPhrase()).isEqualTo(phrase);
         assertThat(all.get(0).getScrapCount()).isEqualTo(scrapCount);
         assertThat(all.get(0).getSource()).isEqualTo(source);
+    }
+
+    @Test
+    public void posts_Updated() throws Exception {
+        //given
+        Posts savedPosts = postsRepository.save(Posts.builder()
+                .category("category")
+                .phraseTopic("phrase topic")
+                .writer("writer")
+                .phrase("phrase")
+                .source("source")
+                .build());
+
+        Long updateId = savedPosts.getId();
+        String expectedCategory = "category2";
+        String expectedPhraseTopic = "phrase topic2";
+        String expectedWriter = "writer2";
+        String expectedPhrase = "phrase2";
+        String expectedSource = "source2";
+
+        PostsUpdateRequestDto requestDto = PostsUpdateRequestDto.builder()
+                .category(expectedCategory)
+                .phraseTopic(expectedPhraseTopic)
+                .writer(expectedWriter)
+                .phrase(expectedPhrase)
+                .source(expectedSource)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/posts/" + updateId;
+
+        HttpEntity<PostsUpdateRequestDto> requestEntity = new HttpEntity<>(requestDto);
+
+        //when
+        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+
+        List<Posts> all = postsRepository.findAll();
+        assertThat(all.get(0).getCategory()).isEqualTo(expectedCategory);
+        assertThat(all.get(0).getPhraseTopic()).isEqualTo(expectedPhraseTopic);
+        assertThat(all.get(0).getWriter()).isEqualTo(expectedWriter);
+        assertThat(all.get(0).getPhrase()).isEqualTo(expectedPhrase);
+        assertThat(all.get(0).getSource()).isEqualTo(expectedSource);
     }
 }
 
