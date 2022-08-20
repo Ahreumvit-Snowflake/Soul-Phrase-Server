@@ -1,5 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.web;
 
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PostsRepository;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
@@ -41,8 +43,8 @@ public class PostsApiControllerTest {
     @Test
     public void posts_Saved() throws Exception { // posts_등록된다()
         //given
-        String category = "category";
-        String phraseTopic = "phrase_topic";
+        Category category = Category.BOOK;
+        PhraseTopic phraseTopic = PhraseTopic.LIFE;
         String writer = "writer";
         String phrase = "phrase";
         int scrapCount = 0;
@@ -79,16 +81,16 @@ public class PostsApiControllerTest {
     public void posts_Updated() throws Exception { // posts_수정된다()
         //given
         Posts savedPosts = postsRepository.save(Posts.builder()
-                .category("category")
-                .phraseTopic("phrase topic")
+                .category(Category.BOOK)
+                .phraseTopic(PhraseTopic.LIFE)
                 .writer("writer")
                 .phrase("phrase")
                 .source("source")
                 .build());
 
         Long updateId = savedPosts.getId();
-        String expectedCategory = "category2";
-        String expectedPhraseTopic = "phrase topic2";
+        Category expectedCategory = Category.DRAMA;
+        PhraseTopic expectedPhraseTopic = PhraseTopic.FAMILY;
         String expectedWriter = "writer2";
         String expectedPhrase = "phrase2";
         String expectedSource = "source2";

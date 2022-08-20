@@ -1,5 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.web.dto;
 
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,15 +10,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class PostsSaveRequestDto {
-    private String category;
-    private String phraseTopic;
+    private Category category;
+    private PhraseTopic phraseTopic;
     private String writer;
     private String phrase;
     private int scrapCount;
     private String source;
 
     @Builder
-    public PostsSaveRequestDto(String category, String phraseTopic, String writer, String phrase, int scrapCount, String source){
+    public PostsSaveRequestDto(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;

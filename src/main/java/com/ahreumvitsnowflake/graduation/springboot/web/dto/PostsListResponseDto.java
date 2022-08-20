@@ -1,5 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.web.dto;
 
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import lombok.Getter;
 
@@ -9,8 +11,8 @@ import java.time.LocalDateTime;
 public class PostsListResponseDto {
     private Long postId;
     // private Long userId;
-    private String category;
-    private String phraseTopic;
+    private Category category;
+    private PhraseTopic phraseTopic;
     private String writer;
     private String phrase;
     private int scrapCount;

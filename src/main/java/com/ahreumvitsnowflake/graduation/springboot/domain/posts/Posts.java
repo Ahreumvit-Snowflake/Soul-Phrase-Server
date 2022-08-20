@@ -26,12 +26,14 @@ public class Posts extends BaseTimeEntity {
 //    private User user;
 
     // 테이블 칼럼 - 카테고리(책, 영화, 드라마, 기타)
+    @Enumerated(EnumType.STRING)
     @Column(length = 200, nullable = false)
-    private String category;
+    private Category category;
 
     // 테이블 칼럼 - 글귀 주제(사랑, 우정, 가족, 인생, 위로, 추억, 기타)
+    @Enumerated(EnumType.STRING)
     @Column(length = 200, nullable = false)
-    private String phraseTopic;
+    private PhraseTopic phraseTopic;
 
     // 테이블 칼럼 - 작성자
     @Column(nullable = false)
@@ -50,7 +52,7 @@ public class Posts extends BaseTimeEntity {
     private String source;
 
     @Builder
-    public Posts(String category, String phraseTopic, String writer, String phrase, int scrapCount, String source){
+    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
@@ -59,7 +61,7 @@ public class Posts extends BaseTimeEntity {
         this.source = source;
     }
 
-    public void update(String category, String phraseTopic, String writer, String phrase, int scrapCount, String source){
+    public void update(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;

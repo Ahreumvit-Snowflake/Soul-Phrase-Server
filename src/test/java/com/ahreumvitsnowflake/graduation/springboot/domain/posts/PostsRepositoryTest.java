@@ -26,8 +26,8 @@ public class PostsRepositoryTest {
     @Test
     public void postsSave_Calling() { // 게시글저장_불러오기()
         //given
-        String category = "카테고리";
-        String phraseTopic = "글귀 주제";
+        Category category = Category.BOOK;
+        PhraseTopic phraseTopic = PhraseTopic.LIFE;
         String writer = "작성자";
         String phrase = "글귀 내용";
         String source = "출처";
@@ -56,8 +56,8 @@ public class PostsRepositoryTest {
         //given
         LocalDateTime now = LocalDateTime.of(2022,8,17,0,0,0);
         postsRepository.save(Posts.builder()
-                .category("category")
-                .phraseTopic("phrase topic")
+                .category(Category.BOOK)
+                .phraseTopic(PhraseTopic.LIFE)
                 .writer("writer")
                 .phrase("phrase")
                 .source("source")
