@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 public class OAuthAttributes {
-    private Map<String, Object> attributes;
+    private Map<String, Object> attributes; // OAuth2 반환하는 유저 정보 Map
     private String nameAttributeKey;
     private String username;
     private String email;
@@ -24,6 +24,7 @@ public class OAuthAttributes {
         this.picture = picture;
     }
     
+    // OAuth2User에서 반환하는 사용자 정보는 Map이라, 값 하나하나를 변환하기 위해 필요
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes){
         if("naver".equals(registrationId)){
             return ofNaver("id", attributes);
