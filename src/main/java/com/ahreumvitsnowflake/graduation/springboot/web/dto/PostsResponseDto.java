@@ -8,13 +8,13 @@ import lombok.Getter;
 @Getter
 public class PostsResponseDto {
     private Long postId;
-    // private Long userId;
     private Category category;
     private PhraseTopic phraseTopic;
     private String writer;
     private String phrase;
     private int scrapCount;
     private String source;
+    private Long userId;
 
     public PostsResponseDto(Posts entity){
         this.postId = entity.getId();
@@ -24,5 +24,6 @@ public class PostsResponseDto {
         this.phrase =entity.getPhrase();
         this.scrapCount = entity.getScrapCount();
         this.source = entity.getSource();
+        this.userId = entity.getUser().getId();
     }
 }

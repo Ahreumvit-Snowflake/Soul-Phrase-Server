@@ -1,6 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 
 import com.ahreumvitsnowflake.graduation.springboot.domain.BaseTimeEntity;
+import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,6 @@ public class Posts extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
-
-    // user 테이블의 user_id 참조키(FK)
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
 
     // 테이블 칼럼 - 카테고리(책, 영화, 드라마, 기타)
     @Enumerated(EnumType.STRING)
@@ -51,14 +47,20 @@ public class Posts extends BaseTimeEntity {
     @Column(nullable = false)
     private String source;
 
+    // user 테이블의 user_id 참조키(FK)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Builder
-    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source){
+    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, User user){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
         this.phrase = phrase;
         this.scrapCount = scrapCount;
         this.source = source;
+        this.user = user;
     }
 
     public void update(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source){

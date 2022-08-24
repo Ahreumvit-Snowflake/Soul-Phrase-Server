@@ -14,9 +14,13 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
+/**
+ * Security UserDetailsService == OAuth OAuth2UserService
+ * */
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
@@ -28,11 +32,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
-        // 현재 로그인 진행 중인 서비스를 구분하는 코드
-        // 네이버 로그인인지, 구글 로그인인지 구분하기 위해 사용
+        // 현재 로그인 진행 중인 OAuth2 서비스 구분 코드(구글, 네이버)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
-        // OAuth2 로그인 진행 시 키가 되는 필드값(PK)
+
+        // OAuth2 로그인 진행 시 키가 되는 필드값(PK) (구글의 기본 코드는 "sub")
         // 네이버, 구글 로그인 동시 지원할 때 사용
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                                             .getUserInfoEndpoint().getUserNameAttributeName();
@@ -41,6 +45,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         User user = saveOrUpdate(attributes);
+
+        // 세션 정보를 저장하는 직렬화된 Dto 클래스
         httpSession.setAttribute("user", new SessionUser(user));
 
         return new DefaultOAuth2User(
@@ -49,7 +55,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 attributes.getNameAttributeKey());
     }
 
-    // 사용자의 정보가 업데이트되었을 때를 대비
+    // 소셜로그인시 기존 회원이 존재하면 수정날짜 정보만 업데이트해 기존의 데이터는 그대로 보존
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
                 .map(entity -> entity.update(attributes.getUsername(), attributes.getPicture()))

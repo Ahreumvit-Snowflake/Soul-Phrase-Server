@@ -1,10 +1,13 @@
 package com.ahreumvitsnowflake.graduation.springboot.web;
 
+import com.ahreumvitsnowflake.graduation.springboot.config.auth.LoginUser;
+import com.ahreumvitsnowflake.graduation.springboot.config.auth.dto.SessionUser;
 import com.ahreumvitsnowflake.graduation.springboot.service.posts.PostsService;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsResponseDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -13,8 +16,8 @@ public class PostsApiController {
     private final PostsService postsService;
 
     @PostMapping("/api/v1/posts") // 게시글 등록
-    public Long save(@RequestBody PostsSaveRequestDto requestDto){
-        return postsService.save(requestDto);
+    public ResponseEntity<Long> save(@RequestBody PostsSaveRequestDto requestDto, @LoginUser SessionUser user){
+        return ResponseEntity.ok(postsService.save(requestDto, user.getEmail()));
     }
 
     @PutMapping("/api/v1/posts/{id}") // 게시글 수정

@@ -7,6 +7,9 @@ import lombok.Getter;
 
 import java.util.Map;
 
+/**
+ * OAuth DTO Class
+ */
 @Getter
 public class OAuthAttributes {
     private Map<String, Object> attributes; // OAuth2 반환하는 유저 정보 Map
@@ -45,6 +48,7 @@ public class OAuthAttributes {
 
     // 네이버 생성자
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes){
+        // JSON 형태이기 때문에 Map을 통해 데이터를 가져온다
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
 
         return OAuthAttributes.builder()
@@ -62,7 +66,7 @@ public class OAuthAttributes {
                 .username(username)
                 .email(email)
                 .picture(picture)
-                .role(Role.GUEST)
+                .role(Role.USER)
                 .build();
     }
 }

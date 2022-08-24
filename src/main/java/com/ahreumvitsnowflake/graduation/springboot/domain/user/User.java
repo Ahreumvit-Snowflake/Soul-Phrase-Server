@@ -6,15 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name="USER", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
-})
+@Table(name="USER")
 public class User extends BaseTimeEntity {
     // user 테이블 기본키(PK)
     @Id
