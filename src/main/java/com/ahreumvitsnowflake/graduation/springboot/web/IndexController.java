@@ -8,6 +8,7 @@ import com.ahreumvitsnowflake.graduation.springboot.service.posts.PostsService;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +21,10 @@ public class IndexController {
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @GetMapping("/") // 메인 페이지
-    public String main(@LoginUser SessionUser user) {
+    public String main(Model model, @LoginUser SessionUser user) {
         if(user != null){
             // 프론트에 user 정보 넘겨주기
-            // model.addAttribute("user", user);
+            model.addAttribute("user", user);
             return "main "+user.getUsername();
         }
         else {
@@ -37,18 +38,18 @@ public class IndexController {
     }
 
     @GetMapping("/posts") // 전체 게시글 조회 페이지
-    public String posts() {
+    public String posts(Model model) {
         // 프론트에 전체 게시물 넘겨주기
-        // model.addAttribute("posts", postsService.findAllDesc());
+        model.addAttribute("posts", postsService.findAllDesc());
         return "posts";
     }
 
     @GetMapping("/posts/update/{id}") // 특정 게시글 수정 페이지
-    public String postsUpdate(@PathVariable Long id, @LoginUser SessionUser user){
+    public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user){
         PostsResponseDto dto = postsService.findById(id);
         
         // 프론트에 post 정보 넘겨주기
-        // model.addAttribute("post", dto);
+        model.addAttribute("posts", dto);
         
         if(user != null){
             if(dto.getUserId().equals(user.getId())){
@@ -59,11 +60,11 @@ public class IndexController {
     }
 
     @GetMapping("/users/update/{id}") // 회원 정보(닉네임) 수정 페이지
-    public String userUpdate(@PathVariable Long id){
+    public String userUpdate(@PathVariable Long id, Model model){
         SessionUser dto = customOAuth2UserService.findById(id);
         
         // 프론트에 user 정보 넘겨주기
-        // model.addAttribute("user", dto);
+        model.addAttribute("user", dto);
 
         return "user-update";
     }
