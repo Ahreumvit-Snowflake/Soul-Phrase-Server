@@ -44,16 +44,31 @@ public class IndexController {
         return "posts";
     }
 
+    @GetMapping("/posts/{id}") // 특정 게시물 조회 페이지
+    public String postsRead(@PathVariable Long id, Model model, @LoginUser SessionUser user){
+        PostsResponseDto dto = postsService.findById(id);
+        if(user != null){
+            if(!dto.getUserId().equals(user.getId())){
+                postsService.updateViewCount(id);
+            }
+        }
+        model.addAttribute("posts", dto);
+        return "posts-read";
+    }
+
     @GetMapping("/posts/update/{id}") // 특정 게시글 수정 페이지
     public String postsUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user){
         PostsResponseDto dto = postsService.findById(id);
-        
-        // 프론트에 post 정보 넘겨주기
-        model.addAttribute("posts", dto);
-        
+
         if(user != null){
             if(dto.getUserId().equals(user.getId())){
-                log.trace("게시글 작성자 본인임");
+                log.trace("게시글 작성자 본인입니다.");
+                // 프론트에 post 정보 넘겨주기
+                model.addAttribute("posts", dto);
+            }
+            else{
+                log.trace("게시글 작성자가 아닙니다. 수정 권한은 작성자에게만 있습니다.");
+                // 프론트에서 경고 알림창을 띄우거나 아니면 저 수정 버튼을 작성자 본인일 경우에만 보이도록 하기
             }
         }
         return "posts-update";

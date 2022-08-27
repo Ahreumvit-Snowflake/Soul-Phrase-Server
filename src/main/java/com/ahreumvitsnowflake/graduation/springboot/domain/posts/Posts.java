@@ -47,19 +47,24 @@ public class Posts extends BaseTimeEntity {
     @Column(nullable = false)
     private String source;
 
+    // 테이블 칼럼 - 조회수
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int viewCount;
+
     // user 테이블의 user_id 참조키(FK)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Builder
-    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, User user){
+    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
         this.phrase = phrase;
         this.scrapCount = scrapCount;
         this.source = source;
+        this.viewCount = viewCount;
         this.user = user;
     }
 

@@ -9,15 +9,16 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PostsListResponseDto {
-    private Long postId;
-    private Category category;
-    private PhraseTopic phraseTopic;
-    private String writer;
-    private String phrase;
-    private int scrapCount;
-    private String source;
-    private Long userId;
-    private LocalDateTime modifiedDate;
+    private final Long postId;
+    private final Category category;
+    private final PhraseTopic phraseTopic;
+    private final String writer;
+    private final String phrase;
+    private final int scrapCount;
+    private final String source;
+    private final int viewCount;
+    private final Long userId;
+    private final LocalDateTime modifiedDate;
 
     public PostsListResponseDto(Posts entity){
         this.postId = entity.getId();
@@ -27,6 +28,7 @@ public class PostsListResponseDto {
         this.phrase = entity.getPhrase();
         this.scrapCount = entity.getScrapCount();
         this.source = entity.getSource();
+        this.viewCount = entity.getViewCount();
         this.userId = entity.getUser().getId();
         this.modifiedDate = entity.getModifiedDate();
     }

@@ -71,4 +71,10 @@ public class PostsService {
                 .map(PostsListResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    // View Counting
+    @Transactional
+    public int updateViewCount(Long id){
+        return postsRepository.updateViewCount(id);
+    }
 }
