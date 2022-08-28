@@ -5,6 +5,7 @@ import com.ahreumvitsnowflake.graduation.springboot.config.auth.LoginUser;
 import com.ahreumvitsnowflake.graduation.springboot.config.auth.dto.SessionUser;
 import com.ahreumvitsnowflake.graduation.springboot.service.posts.PostsService;
 
+import com.ahreumvitsnowflake.graduation.springboot.service.scrap.ScrapService;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexController {
     private final PostsService postsService;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final ScrapService scrapService;
 
     @GetMapping("/") // 메인 페이지
     public String main(Model model, @LoginUser SessionUser user) {
@@ -44,7 +46,25 @@ public class IndexController {
         return "posts";
     }
 
-    @GetMapping("/posts/{id}") // 특정 게시물 조회 페이지
+    @GetMapping("/posts/{id}") // 특정 게시물 조회 또는 수정 페이지
+    public String postsReadOrUpdate(@PathVariable Long id, Model model, @LoginUser SessionUser user){
+        PostsResponseDto dto = postsService.findById(id);
+        if(user != null){
+            if(!dto.getUserId().equals(user.getId())){
+                postsService.updateViewCount(id);
+                model.addAttribute("posts", dto);
+                return "posts-read";
+            }
+            else{
+                model.addAttribute("posts", dto);
+                return "posts-update";
+            }
+        }
+        model.addAttribute("posts", dto);
+        return null;
+    }
+
+    @GetMapping("/posts/read/{id}") // 특정 게시물 조회 페이지
     public String postsRead(@PathVariable Long id, Model model, @LoginUser SessionUser user){
         PostsResponseDto dto = postsService.findById(id);
         if(user != null){
@@ -74,6 +94,18 @@ public class IndexController {
         return "posts-update";
     }
 
+    @GetMapping("/mypage") // 사용자 마이 페이지
+    public String myPage(Model model, @LoginUser SessionUser user) {
+        if(user != null){
+            // 프론트에 user 정보 넘겨주기
+            model.addAttribute("user", user);
+            return "my-page";
+        }
+        else {
+            return "login";
+        }
+    }
+
     @GetMapping("/users/update/{id}") // 회원 정보(닉네임) 수정 페이지
     public String userUpdate(@PathVariable Long id, Model model){
         SessionUser dto = customOAuth2UserService.findById(id);
@@ -82,5 +114,12 @@ public class IndexController {
         model.addAttribute("user", dto);
 
         return "user-update";
+    }
+
+    @GetMapping("/scrap")
+    public String scrap(Model model){
+        // 프론트에 전체 스크랩 넘겨주기
+        model.addAttribute("scrap", scrapService.findAllDesc());
+        return "scrap";
     }
 }

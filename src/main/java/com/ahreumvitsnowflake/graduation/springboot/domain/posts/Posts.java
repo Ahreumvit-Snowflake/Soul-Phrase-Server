@@ -1,6 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 
 import com.ahreumvitsnowflake.graduation.springboot.domain.BaseTimeEntity;
+import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.Scrap;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,11 +9,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name="POST")
+@Table(name="POSTS")
 @DynamicInsert
 public class Posts extends BaseTimeEntity {
     // post 테이블 기본키(PK)
@@ -40,7 +43,7 @@ public class Posts extends BaseTimeEntity {
     private String phrase;
 
     // 테이블 칼럼 - '스크랩' 수
-    @Column(columnDefinition = "integer default 0")
+    @Column(columnDefinition = "integer default 0", nullable = false)
     private int scrapCount;
 
     // 테이블 칼럼 - 출처
@@ -55,6 +58,10 @@ public class Posts extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    // 게시글이 삭제되면 스크랩 기록도 삭제
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
+    Set<Scrap> scrap = new HashSet<>();
 
     @Builder
     public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user){

@@ -77,4 +77,16 @@ public class PostsService {
     public int updateViewCount(Long id){
         return postsRepository.updateViewCount(id);
     }
+
+    // plus Scrap Counting
+    @Transactional
+    public int plusScrapCount(Long id){
+        return postsRepository.plusScrapCount(id);
+    }
+
+    // minus Scrap Counting
+    @Transactional
+    public int minusScrapCount(Long id){
+        return postsRepository.minusScrapCount(id);
+    }
 }
