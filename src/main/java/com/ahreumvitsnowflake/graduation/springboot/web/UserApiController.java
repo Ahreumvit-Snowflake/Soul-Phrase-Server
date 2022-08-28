@@ -1,6 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.web;
 
 import com.ahreumvitsnowflake.graduation.springboot.config.auth.CustomOAuth2UserService;
+import com.ahreumvitsnowflake.graduation.springboot.config.auth.LoginUser;
 import com.ahreumvitsnowflake.graduation.springboot.config.auth.dto.SessionUser;
 
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,18 @@ public class UserApiController {
         customOAuth2UserService.delete(id);
         log.info("탈퇴되는 회원의 아이디 : {}", id);
         return id;
+    }
+
+    @GetMapping("/login-check")
+    public boolean ifLogin (@LoginUser SessionUser user) {
+        System.out.println("user = " + user);
+        if (null == user) return false;
+        SessionUser byId = customOAuth2UserService.findById(user.getId());
+        if (null != byId) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

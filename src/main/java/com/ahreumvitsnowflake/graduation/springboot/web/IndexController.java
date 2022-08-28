@@ -34,11 +34,6 @@ public class IndexController {
         }
     }
 
-    @GetMapping("/posts/save") // 게시글 등록 버튼 누른 후 이동할 페이지
-    public String postsSave() {
-        return "posts-save";
-    }
-
     @GetMapping("/posts") // 전체 게시글 조회 페이지
     public String posts(Model model) {
         // 프론트에 전체 게시물 넘겨주기

@@ -1,5 +1,8 @@
 package com.ahreumvitsnowflake.graduation.springboot.service.posts;
 
+import com.ahreumvitsnowflake.graduation.springboot.config.auth.dto.SessionUser;
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PostsRepository;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
@@ -88,5 +91,32 @@ public class PostsService {
     @Transactional
     public int minusScrapCount(Long id){
         return postsRepository.minusScrapCount(id);
+    }
+
+//    @Transactional
+//    public List<PostsListResponseDto> findByUser(SessionUser user) {
+//        User writer = userRepository.findById(user.getId())
+//                .orElseThrow(() -> new IllegalArgumentException("해당 유저의 아이디가 없습니다. id="+ user.getId()));
+//        return postsRepository.findByUser(user).stream()
+//                .map(PostsListResponseDto::new)
+//                .collect(Collectors.toList());
+//    }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findByCondition(Category category) {
+        return postsRepository.findByCondition(category);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findByConditions(Category category, PhraseTopic phraseTopic) {
+        if (null == category && null == phraseTopic) {
+            return postsRepository.findAllDesc().stream()
+                    .map(PostsListResponseDto::new)
+                    .collect(Collectors.toList());
+        } else if (null == category) {
+            return postsRepository.findByPhraseTopic(phraseTopic);
+        } else if (null == phraseTopic) {
+            return postsRepository.findByCondition(category);
+        } else return postsRepository.findByConditionAndPhraseTopic(category, phraseTopic);
     }
 }
