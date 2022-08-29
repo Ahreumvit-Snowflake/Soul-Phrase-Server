@@ -93,14 +93,13 @@ public class PostsService {
         return postsRepository.minusScrapCount(id);
     }
 
-//    @Transactional
-//    public List<PostsListResponseDto> findByUser(SessionUser user) {
-//        User writer = userRepository.findById(user.getId())
-//                .orElseThrow(() -> new IllegalArgumentException("해당 유저의 아이디가 없습니다. id="+ user.getId()));
-//        return postsRepository.findByUser(user).stream()
-//                .map(PostsListResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
+    // 내가 쓴 글 조회
+    @Transactional
+    public List<PostsListResponseDto> findByUser(Long userId) {
+        User writer = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저의 아이디가 없습니다. id="+userId));
+        return postsRepository.findByUser(writer);
+    }
 
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findByCondition(Category category) {

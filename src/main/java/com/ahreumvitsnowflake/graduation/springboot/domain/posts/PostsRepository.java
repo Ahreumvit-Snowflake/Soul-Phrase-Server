@@ -1,6 +1,5 @@
 package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 
-import com.ahreumvitsnowflake.graduation.springboot.config.auth.dto.SessionUser;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,9 +25,8 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @Query("UPDATE Posts SET scrapCount = scrapCount - 1 WHERE id = :id")
     int minusScrapCount(@Param("id") Long id);
 
-//    @Modifying
-//    @Query("SELECT p FROM Posts p WHERE user := :user")
-//    List<Posts> findByUser(@Param("user") SessionUser user);
+    @Query("SELECT p FROM Posts p WHERE user = :user")
+    List<PostsListResponseDto> findByUser(@Param("user") User user);
 
     @Query("SELECT p FROM Posts p WHERE category = :category")
     List<PostsListResponseDto> findByCondition(@Param("category") Category category);

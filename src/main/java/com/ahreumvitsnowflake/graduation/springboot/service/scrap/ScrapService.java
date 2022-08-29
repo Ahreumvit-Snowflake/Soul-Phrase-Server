@@ -6,7 +6,6 @@ import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.Scrap;
 import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.ScrapRepository;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.UserRepository;
-import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.ScrapDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Transactional
@@ -79,10 +77,11 @@ public class ScrapService {
         return resultData;
     }
 
-    @Transactional(readOnly = true)
-    public List<ScrapDto> findAllDesc() {
-        return scrapRepository.findAllDesc().stream()
-                .map(ScrapDto::new)
-                .collect(Collectors.toList());
+    // 내가 스크랩한 글 모두 조회
+    @Transactional
+    public List<ScrapDto> findByUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저의 아이디가 없습니다. id="+ userId));
+        return scrapRepository.findByUser(user);
     }
 }

@@ -1,9 +1,13 @@
 package com.ahreumvitsnowflake.graduation.springboot.domain.scrap;
 
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
+import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
+import com.ahreumvitsnowflake.graduation.springboot.web.dto.ScrapDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +19,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
     // 게시글의 스크랩 수 카운트
     Optional<Integer> countByPosts(Posts posts);
 
-    // 모든 스크랩 데이터 조회
-    @Query("SELECT s FROM Scrap s ORDER BY s.id DESC")
-    List<Scrap> findAllDesc();
+    // 내가 스크랩한 글 모두 조회
+    @Query("SELECT s FROM Scrap s WHERE user = :user ORDER BY s.id DESC")
+    List<ScrapDto> findByUser(@Param("user") User user);
 }
