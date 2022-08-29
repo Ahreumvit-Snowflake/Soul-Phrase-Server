@@ -110,11 +110,4 @@ public class IndexController {
 
         return "user-update";
     }
-
-    @GetMapping("/scrap")
-    public String scrap(Model model){
-        // 프론트에 전체 스크랩 넘겨주기
-        model.addAttribute("scrap", scrapService.findAllDesc());
-        return "scrap";
-    }
 }

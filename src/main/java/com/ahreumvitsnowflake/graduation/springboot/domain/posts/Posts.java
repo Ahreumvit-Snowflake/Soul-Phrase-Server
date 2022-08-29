@@ -3,14 +3,16 @@ package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 import com.ahreumvitsnowflake.graduation.springboot.domain.BaseTimeEntity;
 import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.Scrap;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -61,7 +63,8 @@ public class Posts extends BaseTimeEntity {
 
     // 게시글이 삭제되면 스크랩 기록도 삭제
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
-    Set<Scrap> scrap = new HashSet<>();
+    @JsonIgnore
+    List<Scrap> scrapList = new ArrayList<>();
 
     @Builder
     public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user){

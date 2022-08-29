@@ -11,6 +11,7 @@ import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsResponseDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,34 +20,41 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 public class PostsApiController {
     private final PostsService postsService;
 
-    @PostMapping("/api/v1/posts") // 게시글 등록
+    // 게시글 등록
+    @PostMapping("/api/v1/posts")
     public ResponseEntity<Long> save(@RequestBody PostsSaveRequestDto requestDto, @LoginUser SessionUser user){
         return ResponseEntity.ok(postsService.save(requestDto, user.getEmail()));
     }
 
-    @PutMapping("/api/v1/posts/{id}") // 게시글 수정
+    // 게시글 수정
+    @PutMapping("/api/v1/posts/{id}")
     public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
         return postsService.update(id, requestDto);
     }
 
-    @GetMapping("/api/v1/posts/{id}") // post_id로 게시글 조회
+    // post_id로 게시글 조회
+    @GetMapping("/api/v1/posts/{id}")
     public PostsResponseDto findById(@PathVariable Long id){
         return postsService.findById(id);
     }
 
-    @DeleteMapping("/api/v1/posts/{id}") // post_id로 게시글 삭제
+    // post_id로 게시글 삭제
+    @DeleteMapping("/api/v1/posts/{id}")
     public Long delete(@PathVariable Long id){
         postsService.delete(id);
         return id;
     }
-//
-//    @GetMapping("/mypage/mypost/{id}")
-//    public ResponseEntity<List<PostsListResponseDto>>findByUser(@LoginUser SessionUser user){
-//        return ResponseEntity.ok(postsService.findByUser(user));
-//    }
+
+    // 내가 쓴 게시글 모두 조회
+    @GetMapping("api/v1/mypage/mypost")
+    public List<PostsListResponseDto> findByUser(@LoginUser SessionUser user){
+        log.info("user id = "+user.getId());
+        return postsService.findByUser(user.getId());
+    }
 
     // 프론트 test용 코드
     @PostMapping("/api/v1/posts/test") // 게시글 등록
@@ -66,6 +74,7 @@ public class PostsApiController {
     @GetMapping("/test/posts/all")
     public List<PostsListResponseDto> getPostsAllTest () {
         return postsService.findAllDesc();
+
     }@GetMapping("/test/posts/condition")
     public List<PostsListResponseDto> getPostsConditionTest (Category category) {
         System.out.println("category = " + category);
