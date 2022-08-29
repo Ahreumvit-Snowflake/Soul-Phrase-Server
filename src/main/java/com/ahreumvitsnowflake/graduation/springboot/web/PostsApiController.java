@@ -48,7 +48,7 @@ public class PostsApiController {
     }
 
     // 내가 쓴 게시글 모두 조회
-    @GetMapping("api/v1/mypage/mypost")
+    @GetMapping("/api/v1/posts/my")
     public List<PostsListResponseDto> findByUser(@LoginUser SessionUser user){
         log.info("user id = "+user.getId());
         return postsService.findByUser(user.getId());

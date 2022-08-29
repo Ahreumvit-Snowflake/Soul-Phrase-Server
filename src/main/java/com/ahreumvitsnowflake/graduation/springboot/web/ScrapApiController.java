@@ -52,7 +52,7 @@ public class ScrapApiController {
     }
 
     // 내가 스크랩한 글 모두 조회
-    @GetMapping("/api/v1/mypage/myscrap")
+    @GetMapping("/api/v1/scrap/my")
     public List<ScrapDto> findByUser(@LoginUser SessionUser user){
         return scrapService.findByUser(user.getId());
     }
