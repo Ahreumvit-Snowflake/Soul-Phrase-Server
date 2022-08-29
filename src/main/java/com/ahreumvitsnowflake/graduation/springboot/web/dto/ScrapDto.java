@@ -1,5 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.web.dto;
 
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
+import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
 import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.Scrap;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -7,15 +9,29 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class ScrapDto {
-    private Long id;
+    private Long scrapId;
     private Long postId;
-    private Long userId;
-    private LocalDateTime createdDate;
+    private Category category;
+    private PhraseTopic phraseTopic;
+    private String writer;
+    private String phrase;
+    private int scrapCount;
+    private String source;
+    private int viewCount;
+    private Long writerId;
+    private LocalDateTime postsModifiedDate;
 
     public ScrapDto(Scrap entity){
-        this.id = entity.getId();
+        this.scrapId = entity.getId();
         this.postId = entity.getPosts().getId();
-        this.userId = entity.getUser().getId();
-        this.createdDate = entity.getCreatedDate();
+        this.category = entity.getPosts().getCategory();
+        this.phraseTopic = entity.getPosts().getPhraseTopic();
+        this.writer = entity.getPosts().getWriter();
+        this.phrase = entity.getPosts().getPhrase();
+        this.scrapCount = entity.getPosts().getScrapCount();
+        this.source = entity.getPosts().getSource();
+        this.viewCount = entity.getPosts().getViewCount();
+        this.writerId = entity.getPosts().getUser().getId();
+        this.postsModifiedDate = entity.getPosts().getModifiedDate();
     }
 }

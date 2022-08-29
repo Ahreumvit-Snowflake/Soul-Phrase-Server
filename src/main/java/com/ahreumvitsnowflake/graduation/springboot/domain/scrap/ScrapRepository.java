@@ -19,7 +19,7 @@ public interface ScrapRepository extends JpaRepository<Scrap, Long> {
     // 게시글의 스크랩 수 카운트
     Optional<Integer> countByPosts(Posts posts);
 
-    // 내가 스크랩한 기록 조회
-    @Query("SELECT s FROM Scrap s WHERE user = :user")
+    // 내가 스크랩한 글 모두 조회
+    @Query("SELECT s FROM Scrap s WHERE user = :user ORDER BY s.id DESC")
     List<ScrapDto> findByUser(@Param("user") User user);
 }

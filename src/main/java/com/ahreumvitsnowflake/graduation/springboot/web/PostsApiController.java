@@ -4,7 +4,6 @@ import com.ahreumvitsnowflake.graduation.springboot.config.auth.LoginUser;
 import com.ahreumvitsnowflake.graduation.springboot.config.auth.dto.SessionUser;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
-import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import com.ahreumvitsnowflake.graduation.springboot.service.posts.PostsService;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsResponseDto;
@@ -15,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.List;
 
 @RequiredArgsConstructor
