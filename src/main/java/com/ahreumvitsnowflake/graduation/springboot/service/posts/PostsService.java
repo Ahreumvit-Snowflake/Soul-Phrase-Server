@@ -125,6 +125,6 @@ public class PostsService {
     @Transactional(readOnly = true)
     public Slice<PostsListResponseDto> pageList(Pageable pageable){
         Slice<Posts> postsSlice = postsRepository.findSliceBy(pageable);
-        return postsSlice.map(posts -> new PostsListResponseDto(posts));
+        return postsSlice.map(PostsListResponseDto::new);
     }
 }
