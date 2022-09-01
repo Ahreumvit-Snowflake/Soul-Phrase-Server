@@ -2,6 +2,8 @@ package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +38,6 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
 
     @Query("SELECT p FROM Posts p WHERE category = :category AND phraseTopic = :phraseTopic")
     List<PostsListResponseDto> findByConditionAndPhraseTopic(@Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
+
+    Slice<Posts> findSliceBy(Pageable pageable);
 }

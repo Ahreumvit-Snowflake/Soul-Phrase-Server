@@ -11,6 +11,10 @@ import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,6 +90,7 @@ public class PostsApiController {
         return postsService.findByConditions(category, phraseTopic);
     }
 
+    // 게시글 전체 조회
     @GetMapping("/api/v1/posts/all")
     public List<PostsListResponseDto> getPostsAll () {
         return postsService.findAllDesc();
@@ -102,5 +107,11 @@ public class PostsApiController {
         System.out.println("category = " + category);
         System.out.println("phraseTopic = " + phraseTopic);
         return postsService.findByConditions(category, phraseTopic);
+    }
+
+    // 게시글 30개씩 조회(더보기 기능)
+    @GetMapping("/api/v1/posts/paging")
+    public Slice<PostsListResponseDto> getPostsWithPaging (@PageableDefault(size=30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return postsService.pageList(pageable);
     }
 }
