@@ -13,6 +13,8 @@ import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -117,5 +119,12 @@ public class PostsService {
         } else if (null == phraseTopic) {
             return postsRepository.findByCondition(category);
         } else return postsRepository.findByConditionAndPhraseTopic(category, phraseTopic);
+    }
+
+    // Paging
+    @Transactional(readOnly = true)
+    public Slice<PostsListResponseDto> pageList(Pageable pageable){
+        Slice<Posts> postsSlice = postsRepository.findSliceBy(pageable);
+        return postsSlice.map(PostsListResponseDto::new);
     }
 }
