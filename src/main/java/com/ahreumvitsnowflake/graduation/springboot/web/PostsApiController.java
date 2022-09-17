@@ -31,7 +31,6 @@ public class PostsApiController {
     public ResponseEntity<Long> save(@RequestBody PostsSaveRequestDto requestDto, @LoginUser SessionUser user){
         return ResponseEntity.ok(postsService.save(requestDto, user.getEmail()));
     }
-
     // 게시글 수정
     @PutMapping("/api/v1/posts/{id}")
     public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
@@ -113,5 +112,11 @@ public class PostsApiController {
     @GetMapping("/api/v1/posts/paging")
     public Slice<PostsListResponseDto> getPostsWithPaging (@PageableDefault(size=30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         return postsService.pageList(pageable);
+    }
+
+    // 게시글 스크랩 많은 순서로 조회
+    @GetMapping("/api/v1/posts/order/scrap")
+    public List<PostsListResponseDto> getPostsOrderByScrap(){
+        return postsService.findOrderByScrapCountDescIdDesc();
     }
 }
