@@ -127,4 +127,12 @@ public class PostsService {
         Slice<Posts> postsSlice = postsRepository.findSliceBy(pageable);
         return postsSlice.map(PostsListResponseDto::new);
     }
+
+    // 스크랩 많은 순서로 정렬
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findOrderByScrapCountDescIdDesc() {
+        return postsRepository.findOrderByScrapCountDescIdDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }

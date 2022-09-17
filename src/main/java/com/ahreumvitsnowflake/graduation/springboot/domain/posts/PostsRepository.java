@@ -15,6 +15,10 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @Query("SELECT p FROM Posts p ORDER BY p.id DESC")
     List<Posts> findAllDesc();
 
+    // 스크랩 많은 순서로 정렬
+    @Query("SELECT p FROM Posts p ORDER BY p.scrapCount DESC, p.id DESC ")
+    List<Posts> findOrderByScrapCountDescIdDesc();
+
     @Modifying
     @Query("UPDATE Posts SET viewCount = viewCount + 1 WHERE id = :id")
     int updateViewCount(@Param("id") Long id);
