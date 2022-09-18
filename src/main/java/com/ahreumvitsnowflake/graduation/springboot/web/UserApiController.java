@@ -36,15 +36,15 @@ public class UserApiController {
 
     // 로그인 체크
     @GetMapping("/login-check")
-    public boolean ifLogin (@LoginUser SessionUser user) {
+    public String ifLogin (@LoginUser SessionUser user) {
         System.out.println("user = " + user);
-        if (null == user) return false;
+        if (null == user) return "0";
         SessionUser byId = customOAuth2UserService.findById(user.getId());
         if (null != byId) {
-            return true;
+            return String.valueOf(user.getId());
         }
         else {
-            return false;
+            return "0";
         }
     }
 }
