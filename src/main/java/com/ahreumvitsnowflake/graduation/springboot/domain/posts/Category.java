@@ -9,5 +9,6 @@ public enum Category {
     BOOK,
     MOVIE,
     DRAMA,
+    MUSIC,
     ETC
 }

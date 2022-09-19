@@ -26,7 +26,7 @@ public class Posts extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long id;
 
-    // 테이블 칼럼 - 카테고리(책, 영화, 드라마, 기타)
+    // 테이블 칼럼 - 카테고리(책, 영화, 드라마, 음악, 기타)
     @Enumerated(EnumType.STRING)
     @Column(length = 200, nullable = false)
     private Category category;
