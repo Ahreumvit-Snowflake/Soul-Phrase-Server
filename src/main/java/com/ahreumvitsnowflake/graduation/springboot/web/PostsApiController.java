@@ -39,8 +39,14 @@ public class PostsApiController {
 
     // post_id로 게시글 조회
     @GetMapping("/api/v1/posts/{id}")
-    public PostsResponseDto findById(@PathVariable Long id){
-        return postsService.findById(id);
+    public PostsResponseDto findById(@PathVariable Long id, @LoginUser SessionUser user){
+        PostsResponseDto dto = postsService.findById(id);
+        if(user!=null){
+            if(!dto.getUserId().equals(user.getId())){
+                postsService.updateViewCount(id);
+            }
+        }
+        return dto;
     }
 
     // post_id로 게시글 삭제
