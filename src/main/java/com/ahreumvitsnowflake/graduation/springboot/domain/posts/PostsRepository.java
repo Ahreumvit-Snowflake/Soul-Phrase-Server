@@ -43,5 +43,14 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @Query("SELECT p FROM Posts p WHERE category = :category AND phraseTopic = :phraseTopic")
     List<PostsListResponseDto> findByConditionAndPhraseTopic(@Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
 
+    @Query("SELECT p FROM Posts p WHERE category = :category ORDER BY p.scrapCount DESC, p.id DESC")
+    List<PostsListResponseDto> findByConditionOrderByScrapCountDescIdDesc(@Param("category") Category category);
+
+    @Query("SELECT p FROM Posts p WHERE phraseTopic = :phraseTopic ORDER BY p.scrapCount DESC, p.id DESC")
+    List<PostsListResponseDto> findByPhraseTopicOrderByScrapCountDescIdDesc(@Param("phraseTopic") PhraseTopic phraseTopic);
+
+    @Query("SELECT p FROM Posts p WHERE category = :category AND phraseTopic = :phraseTopic ORDER BY p.scrapCount DESC, p.id DESC")
+    List<PostsListResponseDto> findByConditionAndPhraseTopicOrderByScrapCountDescIdDesc(@Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
+
     Slice<Posts> findSliceBy(Pageable pageable);
 }
