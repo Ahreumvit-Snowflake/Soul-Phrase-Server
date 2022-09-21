@@ -108,6 +108,7 @@ public class PostsService {
         return postsRepository.findByCondition(category);
     }
 
+    // 최신순 정렬
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findByConditions(Category category, PhraseTopic phraseTopic) {
         if (null == category && null == phraseTopic) {
@@ -121,6 +122,20 @@ public class PostsService {
         } else return postsRepository.findByConditionAndPhraseTopic(category, phraseTopic);
     }
 
+    // 스크랩순 정렬
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findByConditionsOrderByScrapCount(Category category, PhraseTopic phraseTopic) {
+        if (null == category && null == phraseTopic) {
+            return postsRepository.findOrderByScrapCountDescIdDesc().stream()
+                    .map(PostsListResponseDto::new)
+                    .collect(Collectors.toList());
+        } else if (null == category) {
+            return postsRepository.findByPhraseTopicOrderByScrapCountDescIdDesc(phraseTopic);
+        } else if (null == phraseTopic) {
+            return postsRepository.findByConditionOrderByScrapCountDescIdDesc(category);
+        } else return postsRepository.findByConditionAndPhraseTopicOrderByScrapCountDescIdDesc(category, phraseTopic);
+    }
+
     // Paging
     @Transactional(readOnly = true)
     public Slice<PostsListResponseDto> pageList(Pageable pageable){
@@ -128,11 +143,11 @@ public class PostsService {
         return postsSlice.map(PostsListResponseDto::new);
     }
 
-    // 스크랩 많은 순서로 정렬
-    @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findOrderByScrapCountDescIdDesc() {
-        return postsRepository.findOrderByScrapCountDescIdDesc().stream()
-                .map(PostsListResponseDto::new)
-                .collect(Collectors.toList());
-    }
+//    // 스크랩 많은 순서로 정렬
+//    @Transactional(readOnly = true)
+//    public List<PostsListResponseDto> findOrderByScrapCountDescIdDesc() {
+//        return postsRepository.findOrderByScrapCountDescIdDesc().stream()
+//                .map(PostsListResponseDto::new)
+//                .collect(Collectors.toList());
+//    }
 }

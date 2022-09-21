@@ -122,7 +122,9 @@ public class PostsApiController {
 
     // 게시글 스크랩 많은 순서로 조회
     @GetMapping("/api/v1/posts/order/scrap")
-    public List<PostsListResponseDto> getPostsOrderByScrap(){
-        return postsService.findOrderByScrapCountDescIdDesc();
+    public List<PostsListResponseDto> getPostsOrderByScrap(Category category, PhraseTopic phraseTopic){
+        System.out.println("category = " + category);
+        System.out.println("phraseTopic = " + phraseTopic);
+        return postsService.findByConditionsOrderByScrapCount(category, phraseTopic);
     }
 }
