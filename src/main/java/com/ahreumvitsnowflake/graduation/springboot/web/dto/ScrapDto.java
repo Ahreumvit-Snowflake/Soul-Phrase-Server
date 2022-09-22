@@ -4,7 +4,6 @@ import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
 import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.Scrap;
 import lombok.*;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -19,7 +18,7 @@ public class ScrapDto {
     private String source;
     private int viewCount;
     private Long writerId;
-    private LocalDateTime postsModifiedDate;
+    private String postsModifiedDate;
 
     public ScrapDto(Scrap entity){
         this.scrapId = entity.getId();

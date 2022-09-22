@@ -5,8 +5,6 @@ import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 public class PostsListResponseDto {
     private final Long postId;
@@ -18,7 +16,7 @@ public class PostsListResponseDto {
     private final String source;
     private final int viewCount;
     private final Long userId;
-    private final LocalDateTime modifiedDate;
+    private final String modifiedDate;
 
     public PostsListResponseDto(Posts entity){
         this.postId = entity.getId();
