@@ -1,6 +1,5 @@
 package com.ahreumvitsnowflake.graduation.springboot.service.posts;
 
-import com.ahreumvitsnowflake.graduation.springboot.config.auth.dto.SessionUser;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
@@ -53,7 +52,7 @@ public class PostsService {
         Posts posts = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id="+ postId));
         posts.update(requestDto.getCategory(), requestDto.getPhraseTopic(), requestDto.getWriter(),
-                requestDto.getPhrase(), requestDto.getScrapCount(), requestDto.getSource());
+                requestDto.getPhrase(), requestDto.getScrapCount(), requestDto.getSource(), requestDto.getRecommendCount());
         return postId;
     }
 
@@ -93,6 +92,18 @@ public class PostsService {
     @Transactional
     public int minusScrapCount(Long id){
         return postsRepository.minusScrapCount(id);
+    }
+
+    // plus Recommend Counting
+    @Transactional
+    public void plusRecommendCount(Long id){
+        postsRepository.plusRecommendCount(id);
+    }
+
+    // minus Recommend Counting
+    @Transactional
+    public void minusRecommendCount(Long id){
+        postsRepository.minusRecommendCount(id);
     }
 
     // 내가 쓴 글 조회

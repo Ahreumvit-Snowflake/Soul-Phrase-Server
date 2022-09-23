@@ -17,6 +17,7 @@ public class PostsListResponseDto {
     private final int viewCount;
     private final Long userId;
     private final String modifiedDate;
+    private final int recommendCount;
 
     public PostsListResponseDto(Posts entity){
         this.postId = entity.getId();
@@ -29,5 +30,6 @@ public class PostsListResponseDto {
         this.viewCount = entity.getViewCount();
         this.userId = entity.getUser().getId();
         this.modifiedDate = entity.getModifiedDate();
+        this.recommendCount = entity.getRecommendCount();
     }
 }
