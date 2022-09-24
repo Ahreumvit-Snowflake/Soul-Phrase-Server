@@ -10,6 +10,8 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
+import static javax.persistence.EnumType.STRING;
+
 @Getter
 @NoArgsConstructor
 @DynamicInsert
@@ -38,9 +40,13 @@ public class Recommend extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Enumerated(value = STRING)
+    private RecommendType type;
+
     @Builder
-    public Recommend(Posts posts, User user){
+    public Recommend(Posts posts, User user, RecommendType type){
         this.posts = posts;
         this.user = user;
+        this.type = type;
     }
 }
