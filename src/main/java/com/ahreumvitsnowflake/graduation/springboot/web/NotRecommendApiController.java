@@ -18,6 +18,18 @@ import java.util.List;
 public class NotRecommendApiController {
     private final NotRecommendService notRecommendService;
 
+    // post_id로 비추천 등록/취소 한 번에!
+    @PutMapping("/api/v1/not-recommend/{postId}")
+    public ResponseEntity<Integer> updatePostsNotRecommend(@LoginUser SessionUser user, @PathVariable Long postId) {
+        int result=0;
+        if (user != null) {
+            result= notRecommendService.updateNotRecommend(user.getId(), postId);
+        }
+
+        return result!=0 ? new ResponseEntity<>(result, HttpStatus.OK)
+                : new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+    }
+
     // post_id로 비추천 등록
     @PostMapping("/api/v1/not-recommend/{postId}")
     public ResponseEntity<String> addPostsNotRecommend(@LoginUser SessionUser user, @PathVariable Long postId){

@@ -26,6 +26,27 @@ public class ScrapService {
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
 
+    // 스크랩 등록/취소 한 번에!
+    @Transactional
+    public int updateScrap(Long userId, Long postId) {
+        Posts posts = postsRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ postId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id="+ userId));
+        // 중복 추천 방지
+        if(!isNotAlreadyScrap(user, posts)){
+            scrapRepository.save(new Scrap(posts, user));
+            postsRepository.plusRecommendCount(postId);
+            return 1;
+        } else {
+            Scrap scrap = scrapRepository.findByUserAndPosts(user, posts)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 추천이 없습니다. id="));
+            scrapRepository.delete(scrap);
+            postsRepository.minusRecommendCount(postId);
+            return 2;
+        }
+    }
+
     // 스크랩 등록
     @Transactional
     public boolean addScrap(Long userId, Long postId){

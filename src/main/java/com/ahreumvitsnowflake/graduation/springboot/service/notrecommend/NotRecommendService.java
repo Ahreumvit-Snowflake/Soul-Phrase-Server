@@ -26,6 +26,27 @@ public class NotRecommendService {
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
 
+    // 비추천 등록/취소 한 번에!
+    @Transactional
+    public int updateNotRecommend(Long userId, Long postId) {
+        Posts posts = postsRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ postId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id="+ userId));
+        // 중복 추천 방지
+        if(!isNotAlreadyNotRecommend(user, posts)){
+            notRecommendRepository.save(new NotRecommend(posts, user));
+            postsRepository.plusRecommendCount(postId);
+            return 1;
+        } else {
+            NotRecommend notRecommend = notRecommendRepository.findByUserAndPosts(user, posts)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 추천이 없습니다. id="));
+            notRecommendRepository.delete(notRecommend);
+            postsRepository.minusRecommendCount(postId);
+            return 2;
+        }
+    }
+
     //  비추천 등록
     @Transactional
     public boolean addNotRecommend(Long userId, Long postId){
