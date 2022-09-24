@@ -27,7 +27,7 @@ public class RecommendDto {
         this.postId = entity.getPosts().getId();
         this.category = entity.getPosts().getCategory();
         this.phraseTopic = entity.getPosts().getPhraseTopic();
-        this.writer = entity.getPosts().getWriter();
+        this.writer = entity.getUser().getNickname();
         this.phrase = entity.getPosts().getPhrase();
         this.scrapCount = entity.getPosts().getScrapCount();
         this.source = entity.getPosts().getSource();

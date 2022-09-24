@@ -22,7 +22,7 @@ public class PostsResponseDto {
         this.postId = entity.getId();
         this.category = entity.getCategory();
         this.phraseTopic = entity.getPhraseTopic();
-        this.writer = entity.getWriter();
+        this.writer = entity.getUser().getNickname();
         this.phrase =entity.getPhrase();
         this.scrapCount = entity.getScrapCount();
         this.source = entity.getSource();
