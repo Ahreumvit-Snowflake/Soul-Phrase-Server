@@ -21,6 +21,18 @@ import java.util.List;
 public class RecommendApiController {
     private final RecommendService recommendService;
 
+    // post_id로 추천 등록/취소 한 번에!
+    @PutMapping("/api/v1/recommend/{postId}")
+    public ResponseEntity<Integer> updatePostsRecommend(@LoginUser SessionUser user, @PathVariable Long postId) {
+        int result=0;
+        if (user != null) {
+            result= recommendService.updateRecommend(user.getId(), postId);
+        }
+
+        return result!=0 ? new ResponseEntity<>(result, HttpStatus.OK)
+                : new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+    }
+
     // post_id로 추천 등록
     @PostMapping("/api/v1/recommend/{postId}")
     public ResponseEntity<String> addPostsRecommend(@LoginUser SessionUser user, @PathVariable Long postId){
