@@ -26,6 +26,27 @@ public class RecommendService {
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
 
+    // 추천 등록/취소 한 번에!
+    @Transactional
+    public int updateRecommend(Long userId, Long postId) {
+        Posts posts = postsRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ postId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id="+ userId));
+        // 중복 추천 방지
+        if(!isNotAlreadyRecommend(user, posts)){
+            recommendRepository.save(new Recommend(posts, user));
+            postsRepository.plusRecommendCount(postId);
+            return 1;
+        } else {
+            Recommend recommend = recommendRepository.findByUserAndPosts(user, posts)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 추천이 없습니다. id="));
+            recommendRepository.delete(recommend);
+            postsRepository.minusRecommendCount(postId);
+            return 2;
+        }
+    }
+
     // 추천 등록
     @Transactional
     public boolean addRecommend(Long userId, Long postId){
