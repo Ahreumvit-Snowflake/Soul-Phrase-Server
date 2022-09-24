@@ -66,6 +66,10 @@ public class Posts extends BaseTimeEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int recommendCount;
 
+    // 테이블 칼럼 - '비추천' 수
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int notRecommendCount;
+
     // 게시글이 삭제되면 스크랩 기록도 삭제
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -77,7 +81,7 @@ public class Posts extends BaseTimeEntity {
     List<Recommend> recommendList = new ArrayList<>();
 
     @Builder
-    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user, int recommendCount){
+    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user, int recommendCount, int notRecommendCount){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
@@ -87,9 +91,10 @@ public class Posts extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.user = user;
         this.recommendCount = recommendCount;
+        this.notRecommendCount = notRecommendCount;
     }
 
-    public void update(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int recommendCount){
+    public void update(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int recommendCount, int notRecommendCount){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
@@ -97,5 +102,6 @@ public class Posts extends BaseTimeEntity {
         this.scrapCount = scrapCount;
         this.source = source;
         this.recommendCount = recommendCount;
+        this.notRecommendCount = notRecommendCount;
     }
 }

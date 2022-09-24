@@ -61,4 +61,12 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @Modifying
     @Query("UPDATE Posts SET recommendCount = recommendCount - 1 WHERE id = :id")
     int minusRecommendCount(@Param("id") Long id);
+
+    @Modifying
+    @Query("UPDATE Posts SET notRecommendCount = notRecommendCount + 1 WHERE id = :id")
+    int plusNotRecommendCount(@Param("id") Long id);
+
+    @Modifying
+    @Query("UPDATE Posts SET notRecommendCount = notRecommendCount - 1 WHERE id = :id")
+    int minusNotRecommendCount(@Param("id") Long id);
 }
