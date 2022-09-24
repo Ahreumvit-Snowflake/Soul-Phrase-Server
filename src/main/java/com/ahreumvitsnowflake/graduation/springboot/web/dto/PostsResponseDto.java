@@ -17,7 +17,7 @@ public class PostsResponseDto {
     private final int viewCount;
     private final Long userId;
     private final int recommendCount;
-    private final int notRecommendCount;
+    private final int dislikeCount;
 
     public PostsResponseDto(Posts entity){
         this.postId = entity.getId();
@@ -30,6 +30,6 @@ public class PostsResponseDto {
         this.viewCount = entity.getViewCount();
         this.userId = entity.getUser().getId();
         this.recommendCount = entity.getRecommendCount();
-        this.notRecommendCount = entity.getNotRecommendCount();
+        this.dislikeCount = entity.getDislikeCount();
     }
 }

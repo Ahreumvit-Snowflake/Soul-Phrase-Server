@@ -19,6 +19,7 @@ public class RecommendDto {
     private String source;
     private int viewCount;
     private int recommendCount;
+    private int dislikeCount;
     private Long writerId;
     private String postsModifiedDate;
 
@@ -33,6 +34,7 @@ public class RecommendDto {
         this.source = entity.getPosts().getSource();
         this.viewCount = entity.getPosts().getViewCount();
         this.recommendCount = entity.getPosts().getRecommendCount();
+        this.dislikeCount = entity.getPosts().getDislikeCount();
         this.writerId = entity.getPosts().getUser().getId();
         this.postsModifiedDate = entity.getPosts().getModifiedDate();
     }
