@@ -16,13 +16,16 @@ public class PostsUpdateRequestDto {
     private int scrapCount;
     private String source;
 
+    private int recommendCount;
+
     @Builder
-    public PostsUpdateRequestDto(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source){
+    public PostsUpdateRequestDto(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int recommendCount){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
         this.phrase = phrase;
         this.scrapCount = scrapCount;
         this.source = source;
+        this.recommendCount = recommendCount;
     }
 }

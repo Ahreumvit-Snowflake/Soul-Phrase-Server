@@ -53,4 +53,12 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     List<PostsListResponseDto> findByConditionAndPhraseTopicOrderByScrapCountDescIdDesc(@Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
 
     Slice<Posts> findSliceBy(Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE Posts SET recommendCount = recommendCount + 1 WHERE id = :id")
+    int plusRecommendCount(@Param("id") Long id);
+
+    @Modifying
+    @Query("UPDATE Posts SET recommendCount = recommendCount - 1 WHERE id = :id")
+    int minusRecommendCount(@Param("id") Long id);
 }

@@ -1,6 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 
 import com.ahreumvitsnowflake.graduation.springboot.domain.BaseTimeEntity;
+import com.ahreumvitsnowflake.graduation.springboot.domain.recommend.Recommend;
 import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.Scrap;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 
@@ -61,13 +62,22 @@ public class Posts extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    // 테이블 칼럼 - '추천' 수
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int recommendCount;
+
     // 게시글이 삭제되면 스크랩 기록도 삭제
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
     @JsonIgnore
     List<Scrap> scrapList = new ArrayList<>();
 
+    // 게시글이 삭제되면 추천 기록도 삭제
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<Recommend> recommendList = new ArrayList<>();
+
     @Builder
-    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user){
+    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user, int recommendCount){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
@@ -76,14 +86,16 @@ public class Posts extends BaseTimeEntity {
         this.source = source;
         this.viewCount = viewCount;
         this.user = user;
+        this.recommendCount = recommendCount;
     }
 
-    public void update(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source){
+    public void update(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int recommendCount){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
         this.phrase = phrase;
         this.scrapCount = scrapCount;
         this.source = source;
+        this.recommendCount = recommendCount;
     }
 }
