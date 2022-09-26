@@ -18,7 +18,6 @@ public class PostsListResponseDto {
     private final Long userId;
     private final String modifiedDate;
     private final int recommendCount;
-    private final int dislikeCount;
 
     public PostsListResponseDto(Posts entity){
         this.postId = entity.getId();
@@ -32,6 +31,5 @@ public class PostsListResponseDto {
         this.userId = entity.getUser().getId();
         this.modifiedDate = entity.getModifiedDate();
         this.recommendCount = entity.getRecommendCount();
-        this.dislikeCount = entity.getDislikeCount();
     }
 }
