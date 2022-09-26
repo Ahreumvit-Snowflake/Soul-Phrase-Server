@@ -1,4 +1,4 @@
-package com.ahreumvitsnowflake.graduation.springboot.domain.recommend;
+package com.ahreumvitsnowflake.graduation.springboot.domain.notrecommend;
 
 import com.ahreumvitsnowflake.graduation.springboot.domain.BaseTimeEntity;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
@@ -13,33 +13,33 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @DynamicInsert
-@Table(name="RECOMMEND", uniqueConstraints = {
+@Table(name="NOT_RECOMMEND", uniqueConstraints = {
         @UniqueConstraint(
-                name = "recommend_uk",
+                name = "not_recommend_uk",
                 columnNames = {"post_id", "user_id"}
         )
-    }
+}
 )
 @Entity
-public class Recommend extends BaseTimeEntity {
-    // recommend 테이블 기본키(PK)
+public class NotRecommend extends BaseTimeEntity {
+    // not_recommend 테이블 기본키(PK)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recommend_id")
+    @Column(name = "not_recommend_id")
     private Long id;
 
-    // recommend 테이블의 post_id 참조키(FK)
+    // not_recommend 테이블의 post_id 참조키(FK)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Posts posts;
 
-    // recommend 테이블의 user_id 참조키(FK)
+    // not_recommend 테이블의 user_id 참조키(FK)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Builder
-    public Recommend(Posts posts, User user){
+    public NotRecommend(Posts posts, User user){
         this.posts = posts;
         this.user = user;
     }

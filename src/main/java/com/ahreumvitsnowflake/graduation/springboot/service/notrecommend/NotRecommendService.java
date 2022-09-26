@@ -1,12 +1,12 @@
-package com.ahreumvitsnowflake.graduation.springboot.service.scrap;
+package com.ahreumvitsnowflake.graduation.springboot.service.notrecommend;
 
+import com.ahreumvitsnowflake.graduation.springboot.domain.notrecommend.NotRecommend;
+import com.ahreumvitsnowflake.graduation.springboot.domain.notrecommend.NotRecommendRepository;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PostsRepository;
-import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.Scrap;
-import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.ScrapRepository;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.UserRepository;
-import com.ahreumvitsnowflake.graduation.springboot.web.dto.ScrapDto;
+import com.ahreumvitsnowflake.graduation.springboot.web.dto.NotRecommendDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,67 +21,67 @@ import java.util.Objects;
 @Transactional
 @RequiredArgsConstructor
 @Service
-public class ScrapService {
-    private final ScrapRepository scrapRepository;
+public class NotRecommendService {
+    private final NotRecommendRepository notRecommendRepository;
     private final PostsRepository postsRepository;
     private final UserRepository userRepository;
 
-    // 스크랩 등록
+    //  비추천 등록
     @Transactional
-    public boolean addScrap(Long userId, Long postId){
+    public boolean addNotRecommend(Long userId, Long postId){
         Posts posts = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ postId));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id="+ userId));
-        // 중복 스크랩 방지
-        if(!isNotAlreadyScrap(user, posts)){
-            scrapRepository.save(new Scrap(posts, user));
-            postsRepository.plusScrapCount(postId);
+        // 중복 비추천 방지
+        if(!isNotAlreadyNotRecommend(user, posts)){
+            notRecommendRepository.save(new NotRecommend(posts, user));
+            postsRepository.plusNotRecommendCount(postId);
             return true;
         }
         return false;
     }
 
-    // 스크랩 취소
+    // 비추천 취소
     @Transactional
-    public void cancelScrap(Long userId, Long postId){
+    public void cancelNotRecommend(Long userId, Long postId){
         Posts posts = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ postId));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id="+ userId));
-        Scrap scrap = scrapRepository.findByUserAndPosts(user, posts)
-                .orElseThrow(() -> new IllegalArgumentException("해당 스크랩이 없습니다. id="));
-        scrapRepository.delete(scrap);
-        postsRepository.minusScrapCount(postId);
+        NotRecommend notRecommend = notRecommendRepository.findByUserAndPosts(user, posts)
+                .orElseThrow(() -> new IllegalArgumentException("해당 비추천이 없습니다. id="));
+        notRecommendRepository.delete(notRecommend);
+        postsRepository.minusNotRecommendCount(postId);
     }
 
-    // 사용자가 이미 스크랩한 게시글인지 체크
+    // 사용자가 이미 비추천한 게시글인지 체크
     @Transactional
-    private boolean isNotAlreadyScrap(User user, Posts posts) {
-        return scrapRepository.findByUserAndPosts(user, posts).isPresent();
+    private boolean isNotAlreadyNotRecommend(User user, Posts posts) {
+        return notRecommendRepository.findByUserAndPosts(user, posts).isPresent();
     }
 
-    // 해당 게시물을 스크랩한 사용자 리스트 반환
-    public List<String> count(Long postId, Long userId){
+    // 해당 게시물을 비추천한 사용자 리스트 반환
+    public List<String> thisPostsNotRecommendUserList(Long postId, Long userId){
         Posts posts = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id="+ postId));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 없습니다. id="+ userId));
-        Integer postsScrapCount = scrapRepository.countByPosts(posts).orElse(0);
-        List<String> resultData = new ArrayList<>(Arrays.asList(String.valueOf(postsScrapCount)));
+        Integer postsNotRecommendCount = notRecommendRepository.countByPosts(posts).orElse(0);
+        List<String> resultData = new ArrayList<>(Arrays.asList(String.valueOf(postsNotRecommendCount)));
 
         if(Objects.nonNull(user)){
-            resultData.add(String.valueOf(isNotAlreadyScrap(user, posts)));
+            resultData.add(String.valueOf(isNotAlreadyNotRecommend(user, posts)));
             return resultData;
         }
         return resultData;
     }
 
-    // 내가 스크랩한 글 모두 조회
+    // 내가 비추천한 글 모두 조회
     @Transactional
-    public List<ScrapDto> findByUser(Long userId) {
+    public List<NotRecommendDto> findByUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저의 아이디가 없습니다. id="+ userId));
-        return scrapRepository.findByUser(user);
+        return notRecommendRepository.findByUser(user);
     }
 }
