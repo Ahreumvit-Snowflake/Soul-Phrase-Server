@@ -18,18 +18,6 @@ import java.util.List;
 public class ScrapApiController {
     private final ScrapService scrapService;
 
-    // post_id로 스크랩 등록/취소 한 번에!
-    @PutMapping("/api/v1/scrap/{postId}")
-    public ResponseEntity<Integer> updateScrap(@LoginUser SessionUser user, @PathVariable Long postId) {
-        int result=0;
-        if (user != null) {
-            result= scrapService.updateScrap(user.getId(), postId);
-        }
-
-        return result!=0 ? new ResponseEntity<>(result, HttpStatus.OK)
-                : new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-    }
-
     // post_id로 스크랩 등록
     @PostMapping("/api/v1/scrap/{postId}")
     public ResponseEntity<String> addScrap(@LoginUser SessionUser user, @PathVariable Long postId){
