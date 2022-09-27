@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/login-check", "/test/**", "/api/v1/**").permitAll()
+                    .antMatchers("http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/login-check", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/test/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/api/v1/**").permitAll()
 //                    .antMatchers("/api/v1/**").hasRole(Role.USER.name())
                     .anyRequest().authenticated()
                 .and()
