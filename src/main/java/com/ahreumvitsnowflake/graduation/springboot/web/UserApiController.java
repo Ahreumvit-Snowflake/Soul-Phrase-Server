@@ -35,7 +35,7 @@ public class UserApiController {
     }
 
     // 로그인 체크
-    @GetMapping("/login-check")
+    @GetMapping("api/v1/login-check")
     public String ifLogin (@LoginUser SessionUser user) {
         System.out.println("user = " + user);
         if (null == user) return "0";
