@@ -1,6 +1,5 @@
 package com.ahreumvitsnowflake.graduation.springboot.config.auth;
 
-import com.ahreumvitsnowflake.graduation.springboot.domain.user.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     //.mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .antMatchers("http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8000/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/login-check", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/test/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/api/v1/**").permitAll()
-                    .antMatchers("http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/api/v1/**").hasRole(Role.USER.name())
+//                    .antMatchers("/api/v1/**").hasRole(Role.USER.name())
                     .anyRequest().authenticated()
                 .and()
                     .logout()
