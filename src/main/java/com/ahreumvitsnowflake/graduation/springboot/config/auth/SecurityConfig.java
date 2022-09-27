@@ -22,10 +22,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .anyRequest().authenticated()
                 .and()
                     .logout()
-                        .logoutSuccessUrl("http://localhost:3000")
+                        .logoutSuccessUrl("http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:3000")
                 .and()
                     .oauth2Login()
-                    .defaultSuccessUrl("http://localhost:3000")
+                    .defaultSuccessUrl("http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:3000")
                     .userInfoEndpoint() // // OAuth2 로그인 성공 후 가져올 설정들
                     .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
     }
