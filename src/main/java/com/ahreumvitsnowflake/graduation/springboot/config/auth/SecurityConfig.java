@@ -1,7 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.config.auth;
 
-import com.ahreumvitsnowflake.graduation.springboot.domain.user.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,6 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
+                    .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/login-check", "/test/**", "/api/v1/**").permitAll()
 //                    .antMatchers("/api/v1/**").hasRole(Role.USER.name())
                     .anyRequest().authenticated()
