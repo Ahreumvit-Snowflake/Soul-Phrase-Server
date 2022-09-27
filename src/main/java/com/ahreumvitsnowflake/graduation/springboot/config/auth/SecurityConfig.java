@@ -18,7 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     //.mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                    .antMatchers("http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8000/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/login-check", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/test/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/api/v1/**").permitAll()
+                    .antMatchers("/", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:3000", "/css/**", "/images/**", "/js/**", "/h2-console/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/test/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:3000/api/v1/**", "http://ec2-54-180-180-137.ap-northeast-2.compute.amazonaws.com:8080/api/v1/**").permitAll()
 //                    .antMatchers("/api/v1/**").hasRole(Role.USER.name())
                     .anyRequest().authenticated()
                 .and()
