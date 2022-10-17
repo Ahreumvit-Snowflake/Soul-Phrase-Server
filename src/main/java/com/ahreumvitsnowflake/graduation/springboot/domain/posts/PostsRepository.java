@@ -77,4 +77,8 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     // 신고수가 특정 개수 이상인 게시물 리스트 조회
     @Query("SELECT p FROM Posts p WHERE reportCount = :reportCount")
     List<PostsListResponseDto> findByReportCount(@Param("reportCount") int reportCount);
+
+    // 일주일 간 인기글 Top 5 조회
+    @Query("SELECT p FROM Posts p WHERE createdDate >= :startDate AND createdDate <= :endDate ORDER BY p.scrapCount DESC, p.recommendCount DESC")
+    Slice<Posts> findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(Pageable pageable, @Param("startDate") String startDate, @Param("endDate") String endDate);
 }

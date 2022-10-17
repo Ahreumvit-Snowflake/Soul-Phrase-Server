@@ -127,4 +127,11 @@ public class PostsApiController {
         System.out.println("phraseTopic = " + phraseTopic);
         return postsService.findByConditionsOrderByScrapCount(category, phraseTopic);
     }
+
+    // 일주일 간 인기글 Top 5 조회
+    @GetMapping("/api/v1/posts/popular/week")
+    public List<PostsListResponseDto> getPostsOrderByPopular(@PageableDefault(size=5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+        Slice<PostsListResponseDto> popularPosts = postsService.popularPosts(pageable);
+        return popularPosts.getContent();
+    }
 }

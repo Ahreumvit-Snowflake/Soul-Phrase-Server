@@ -18,6 +18,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -177,6 +179,26 @@ public class PostsService {
                 log.info("신고수 2 이상이라, postId : {}인 글이 자동 삭제되었습니다", posts.getId());
             }
         }
+    }
+
+    // 일주일 간 인기글 Top 5 조회
+    @Transactional
+    public Slice<PostsListResponseDto> popularPosts(Pageable pageable) {
+        // 현재 시간
+        LocalDateTime now = LocalDateTime.now();
+        // 일주일 전
+        LocalDateTime sevenDaysAgo = now.minusDays(7);
+
+        // test : 현재 시간에서 5분 전
+        // LocalDateTime fiveMinutesAgo = now.minusMinutes(5);
+
+        String endDate = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String startDate = sevenDaysAgo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        //String startDate = fiveMinutesAgo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        Slice<Posts> postsSlice = postsRepository.findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(pageable, startDate, endDate);
+        log.info("{}부터 {} 사이 인기글 Top 5 조회", startDate, endDate);
+        return postsSlice.map(PostsListResponseDto::new);
     }
 
 //    // 스크랩 많은 순서로 정렬
