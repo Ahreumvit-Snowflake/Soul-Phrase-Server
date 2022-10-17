@@ -20,6 +20,7 @@ public class PostsListResponseDto {
     private final int recommendCount;
     private final int dislikeCount;
 
+    private final int reportCount;
     public PostsListResponseDto(Posts entity){
         this.postId = entity.getId();
         this.category = entity.getCategory();
@@ -33,5 +34,6 @@ public class PostsListResponseDto {
         this.modifiedDate = entity.getModifiedDate();
         this.recommendCount = entity.getRecommendCount();
         this.dislikeCount = entity.getDislikeCount();
+        this.reportCount = entity.getReportCount();
     }
 }

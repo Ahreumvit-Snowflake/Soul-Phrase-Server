@@ -2,6 +2,7 @@ package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 
 import com.ahreumvitsnowflake.graduation.springboot.domain.BaseTimeEntity;
 import com.ahreumvitsnowflake.graduation.springboot.domain.recommend.Recommend;
+import com.ahreumvitsnowflake.graduation.springboot.domain.report.Report;
 import com.ahreumvitsnowflake.graduation.springboot.domain.scrap.Scrap;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 
@@ -70,6 +71,11 @@ public class Posts extends BaseTimeEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int dislikeCount;
 
+
+    // 테이블 칼럼 - '신고' 수
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int reportCount;
+
     // 게시글이 삭제되면 스크랩 기록도 삭제
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -80,8 +86,13 @@ public class Posts extends BaseTimeEntity {
     @JsonIgnore
     List<Recommend> recommendList = new ArrayList<>();
 
+    // 게시글이 삭제되면 신고 기록도 삭제
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<Report> reportList = new ArrayList<>();
+
     @Builder
-    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user, int recommendCount, int dislikeCount){
+    public Posts(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int viewCount, User user, int recommendCount, int dislikeCount, int reportCount){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
@@ -91,10 +102,11 @@ public class Posts extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.user = user;
         this.recommendCount = recommendCount;
-        this.dislikeCount=dislikeCount;
+        this.dislikeCount = dislikeCount;
+        this.reportCount = reportCount;
     }
 
-    public void update(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int recommendCount, int dislikeCount){
+    public void update(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int recommendCount, int dislikeCount, int reportCount){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
@@ -102,6 +114,7 @@ public class Posts extends BaseTimeEntity {
         this.scrapCount = scrapCount;
         this.source = source;
         this.recommendCount = recommendCount;
-        this.dislikeCount=dislikeCount;
+        this.dislikeCount = dislikeCount;
+        this.reportCount = reportCount;
     }
 }
