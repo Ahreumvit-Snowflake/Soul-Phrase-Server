@@ -18,9 +18,10 @@ public class PostsUpdateRequestDto {
 
     private int recommendCount;
     private int dislikeCount;
-
+    private int reportCount;
+    
     @Builder
-    public PostsUpdateRequestDto(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int recommendCount, int dislikeCount){
+    public PostsUpdateRequestDto(Category category, PhraseTopic phraseTopic, String writer, String phrase, int scrapCount, String source, int recommendCount, int dislikeCount, int reportCount){
         this.category = category;
         this.phraseTopic = phraseTopic;
         this.writer = writer;
@@ -29,5 +30,6 @@ public class PostsUpdateRequestDto {
         this.source = source;
         this.recommendCount = recommendCount;
         this.dislikeCount = dislikeCount;
+        this.reportCount = reportCount;
     }
 }

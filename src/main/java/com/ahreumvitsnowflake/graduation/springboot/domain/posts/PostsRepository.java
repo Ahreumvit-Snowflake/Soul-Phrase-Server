@@ -69,4 +69,8 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     @Modifying
     @Query("UPDATE Posts SET dislikeCount = dislikeCount - 1 WHERE id = :id")
     int minusDislikeCount(@Param("id") Long id);
+
+    @Modifying
+    @Query("UPDATE Posts SET reportCount = reportCount + 1 WHERE id = :id")
+    int plusReportCount(@Param("id") Long id);
 }

@@ -52,7 +52,7 @@ public class PostsService {
         Posts posts = postsRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id="+ postId));
         posts.update(requestDto.getCategory(), requestDto.getPhraseTopic(), requestDto.getWriter(),
-                requestDto.getPhrase(), requestDto.getScrapCount(), requestDto.getSource(), requestDto.getRecommendCount(), requestDto.getDislikeCount());
+                requestDto.getPhrase(), requestDto.getScrapCount(), requestDto.getSource(), requestDto.getRecommendCount(), requestDto.getDislikeCount(), requestDto.getReportCount());
         return postId;
     }
 
@@ -104,6 +104,12 @@ public class PostsService {
     @Transactional
     public void minusRecommendCount(Long id){
         postsRepository.minusRecommendCount(id);
+    }
+
+    // plus Report Counting
+    @Transactional
+    public void plusReportCount(Long id){
+        postsRepository.plusReportCount(id);
     }
 
     // 내가 쓴 글 조회
