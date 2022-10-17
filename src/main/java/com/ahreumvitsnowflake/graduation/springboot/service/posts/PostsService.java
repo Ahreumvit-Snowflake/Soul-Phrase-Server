@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -160,6 +161,24 @@ public class PostsService {
         return postsSlice.map(PostsListResponseDto::new);
     }
 
+    // 1시간마다 신고수가 2개 이상인 posts 조회해서 삭제
+    @Scheduled(cron = "0 0 0/1 * * *")
+    @Transactional
+    public void deletePostsByReports(){
+        List<PostsListResponseDto> postsList = postsRepository.findByReportCount(2);
+        if(postsList.size() == 0){
+            log.info("신고수 2 이상인 게시물이 없습니다.");
+        }
+        else{
+            for (PostsListResponseDto postsListResponseDto : postsList) {
+                Posts posts = postsRepository.findById(postsListResponseDto.getPostId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다. id=" + postsListResponseDto.getPostId()));
+                delete(posts.getId());
+                log.info("신고수 2 이상이라, postId : {}인 글이 자동 삭제되었습니다", posts.getId());
+            }
+        }
+    }
+
 //    // 스크랩 많은 순서로 정렬
 //    @Transactional(readOnly = true)
 //    public List<PostsListResponseDto> findOrderByScrapCountDescIdDesc() {
@@ -167,4 +186,5 @@ public class PostsService {
 //                .map(PostsListResponseDto::new)
 //                .collect(Collectors.toList());
 //    }
+
 }
