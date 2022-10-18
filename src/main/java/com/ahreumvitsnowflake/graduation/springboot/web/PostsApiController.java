@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -116,8 +117,9 @@ public class PostsApiController {
 
     // 게시글 30개씩 조회(더보기 기능)
     @GetMapping("/api/v1/posts/paging")
-    public Slice<PostsListResponseDto> getPostsWithPaging (@PageableDefault(size=30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return postsService.pageList(pageable);
+    public List<PostsListResponseDto> getPostsWithPaging (@PageableDefault(size=30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Slice<PostsListResponseDto> popularPosts = postsService.pageList(pageable);
+        return popularPosts.getContent();
     }
 
     // 게시글 스크랩 많은 순서로 조회
@@ -130,7 +132,13 @@ public class PostsApiController {
 
     // 일주일 간 인기글 Top 5 조회
     @GetMapping("/api/v1/posts/popular/week")
-    public List<PostsListResponseDto> getPostsOrderByPopular(@PageableDefault(size=5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+    public List<PostsListResponseDto> getPostsOrderByPopular(@PageableDefault(size = 5)
+                                                             @SortDefault.SortDefaults({
+                                                                     @SortDefault(sort="scrapCount", direction = Sort.Direction.DESC),
+                                                                     @SortDefault(sort="recommendCount", direction = Sort.Direction.DESC),
+                                                                     @SortDefault(sort="id", direction = Sort.Direction.DESC)
+                                                             }) Pageable pageable
+                                                             ){
         Slice<PostsListResponseDto> popularPosts = postsService.popularPosts(pageable);
         return popularPosts.getContent();
     }

@@ -12,8 +12,10 @@ import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -199,6 +201,14 @@ public class PostsService {
         Slice<Posts> postsSlice = postsRepository.findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(pageable, startDate, endDate);
         log.info("{}부터 {} 사이 인기글 Top 5 조회", startDate, endDate);
         return postsSlice.map(PostsListResponseDto::new);
+    }
+
+    // 5분 간격으로 인기글 refresh 하도록 일단은 주석처리 해뒀음
+    // @Scheduled(cron = "0 0/5 * * * *")
+    @Transactional
+    public void refreshPopularPosts(){
+        Pageable pageable = PageRequest.of(0, 5, Sort.by("scrapCount").descending().and(Sort.by("recommendCount").descending()).and(Sort.by("id").descending()));
+        popularPosts(pageable);
     }
 
 //    // 스크랩 많은 순서로 정렬

@@ -79,6 +79,11 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     List<PostsListResponseDto> findByReportCount(@Param("reportCount") int reportCount);
 
     // 일주일 간 인기글 Top 5 조회
-    @Query("SELECT p FROM Posts p WHERE createdDate >= :startDate AND createdDate <= :endDate ORDER BY p.scrapCount DESC, p.recommendCount DESC")
+    @Query("SELECT p FROM Posts p WHERE createdDate >= :startDate AND createdDate <= :endDate ORDER BY p.scrapCount DESC, p.recommendCount DESC, p.id DESC")
     Slice<Posts> findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(Pageable pageable, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+//    // 일주일 간 인기글 Top 5 조회
+//    @Query("SELECT p FROM Posts p WHERE createdDate >= :startDate AND createdDate <= :endDate ORDER BY p.scrapCount DESC, p.recommendCount DESC, p.id DESC")
+//    Slice<Posts> findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(Pageable pageable, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
 }
