@@ -11,6 +11,7 @@ import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -64,70 +65,42 @@ public class PostsApiController {
         return postsService.findByUser(user.getId());
     }
 
-    // 프론트 test용 코드
-    @PostMapping("/api/v1/posts/test") // 게시글 등록
-    public int save(@RequestBody PostsSaveRequestDto requestDto){
-        System.out.println('옴');
-        System.out.println("requestDto = " + requestDto);
-        return 1;
-    }
-
-    @PostMapping("/api/v1/posts/test/tests") // 게시글 등록
-    public int savedd(@RequestBody PostsSaveRequestDto requestDto, @LoginUser SessionUser user){
-        System.out.println('옴');
-        System.out.println("requestDto = " + requestDto);
-        System.out.println("user = " + user);
-        return 1;
-    }
-    @GetMapping("/test/posts/all")
-    public List<PostsListResponseDto> getPostsAllTest () {
-        return postsService.findAllDesc();
-
-    }@GetMapping("/test/posts/condition")
-    public List<PostsListResponseDto> getPostsConditionTest (Category category) {
-        System.out.println("category = " + category);
-        return postsService.findByCondition(category);
-    }
-
-    @GetMapping("/test/posts/conditions")
-    public List<PostsListResponseDto> getPostsConditionsTest (Category category, PhraseTopic phraseTopic) {
-        System.out.println("category = " + category);
-        System.out.println("phraseTopic = " + phraseTopic);
-        return postsService.findByConditions(category, phraseTopic);
-    }
-
     // 게시글 전체 조회
     @GetMapping("/api/v1/posts/all")
     public List<PostsListResponseDto> getPostsAll () {
         return postsService.findAllDesc();
     }
 
-    @GetMapping("/api/v1/posts/condition")
-    public List<PostsListResponseDto> getPostsCondition (Category category) {
-        System.out.println("category = " + category);
-        return postsService.findByCondition(category);
-    }
-
-    @GetMapping("/api/v1/posts/conditions")
-    public List<PostsListResponseDto> getPostsConditions (Category category, PhraseTopic phraseTopic) {
-        System.out.println("category = " + category);
-        System.out.println("phraseTopic = " + phraseTopic);
-        return postsService.findByConditions(category, phraseTopic);
-    }
-
-    // 게시글 30개씩 조회(더보기 기능)
+    // 게시글 30개씩 조회
     @GetMapping("/api/v1/posts/paging")
-    public List<PostsListResponseDto> getPostsWithPaging (@PageableDefault(size=30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Slice<PostsListResponseDto> popularPosts = postsService.pageList(pageable);
-        return popularPosts.getContent();
+    public Page<PostsListResponseDto> getPostsWithPaging (@PageableDefault(size=30, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        return postsService.pageList(pageable);
     }
 
-    // 게시글 스크랩 많은 순서로 조회
+    // 최신순 4개씩 조회 - category 선택 포함
+    @GetMapping("/api/v1/posts/condition")
+    public Page<PostsListResponseDto> getPostsCondition (@PageableDefault(size=4, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Category category) {
+        log.info("category : {}", category);
+        return postsService.findByCondition(pageable, category);
+    }
+
+    // 카테고리별/주제별 최신순 4개씩 조회 API
+    @GetMapping("/api/v1/posts/order/recent")
+    public Page<PostsListResponseDto> getPostsConditions (@PageableDefault(size=4, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Category category, PhraseTopic phraseTopic) {
+        log.info("category : {}, phraseTopic : {}", category, phraseTopic);
+        return postsService.findByConditions(pageable, category, phraseTopic);
+    }
+
+    // 카테고리별/주제별 스크랩순 4개씩 조회 API
     @GetMapping("/api/v1/posts/order/scrap")
-    public List<PostsListResponseDto> getPostsOrderByScrap(Category category, PhraseTopic phraseTopic){
-        System.out.println("category = " + category);
-        System.out.println("phraseTopic = " + phraseTopic);
-        return postsService.findByConditionsOrderByScrapCount(category, phraseTopic);
+    public Page<PostsListResponseDto> getPostsOrderByScrap(@PageableDefault(size = 4)
+                                                               @SortDefault.SortDefaults({
+                                                                       @SortDefault(sort="scrapCount", direction = Sort.Direction.DESC),
+                                                                       @SortDefault(sort="id", direction = Sort.Direction.DESC)
+                                                               }) Pageable pageable,
+                                                           Category category, PhraseTopic phraseTopic){
+        log.info("category : {}, phraseTopic : {}", category, phraseTopic);
+        return postsService.findByConditions(pageable, category, phraseTopic);
     }
 
     // 일주일 간 인기글 Top 5 조회

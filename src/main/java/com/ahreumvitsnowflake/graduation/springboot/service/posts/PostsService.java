@@ -12,10 +12,7 @@ import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -125,44 +122,28 @@ public class PostsService {
         return postsRepository.findByUser(writer);
     }
 
+    // category 조회
     @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findByCondition(Category category) {
-        return postsRepository.findByCondition(category);
+    public Page<PostsListResponseDto> findByCondition(Pageable pageable, Category category) {
+        return postsRepository.findByCondition(pageable, category);
     }
 
-    // 최신순 정렬
+    // category, phraseTopic 조회
     @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findByConditions(Category category, PhraseTopic phraseTopic) {
+    public Page<PostsListResponseDto> findByConditions(Pageable pageable, Category category, PhraseTopic phraseTopic) {
         if (null == category && null == phraseTopic) {
-            return postsRepository.findAllDesc().stream()
-                    .map(PostsListResponseDto::new)
-                    .collect(Collectors.toList());
+            return postsRepository.findPageAllDesc(pageable);
         } else if (null == category) {
-            return postsRepository.findByPhraseTopic(phraseTopic);
+            return postsRepository.findByPhraseTopic(pageable, phraseTopic);
         } else if (null == phraseTopic) {
-            return postsRepository.findByCondition(category);
-        } else return postsRepository.findByConditionAndPhraseTopic(category, phraseTopic);
-    }
-
-    // 스크랩순 정렬
-    @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findByConditionsOrderByScrapCount(Category category, PhraseTopic phraseTopic) {
-        if (null == category && null == phraseTopic) {
-            return postsRepository.findOrderByScrapCountDescIdDesc().stream()
-                    .map(PostsListResponseDto::new)
-                    .collect(Collectors.toList());
-        } else if (null == category) {
-            return postsRepository.findByPhraseTopicOrderByScrapCountDescIdDesc(phraseTopic);
-        } else if (null == phraseTopic) {
-            return postsRepository.findByConditionOrderByScrapCountDescIdDesc(category);
-        } else return postsRepository.findByConditionAndPhraseTopicOrderByScrapCountDescIdDesc(category, phraseTopic);
+            return postsRepository.findByCondition(pageable, category);
+        } else return postsRepository.findByConditionAndPhraseTopic(pageable, category, phraseTopic);
     }
 
     // Paging
     @Transactional(readOnly = true)
-    public Slice<PostsListResponseDto> pageList(Pageable pageable){
-        Slice<Posts> postsSlice = postsRepository.findSliceBy(pageable);
-        return postsSlice.map(PostsListResponseDto::new);
+    public Page<PostsListResponseDto> pageList(Pageable pageable){
+        return postsRepository.findPageAllDesc(pageable);
     }
 
     // 1시간마다 신고수가 2개 이상인 posts 조회해서 삭제
@@ -210,13 +191,4 @@ public class PostsService {
         Pageable pageable = PageRequest.of(0, 5, Sort.by("scrapCount").descending().and(Sort.by("recommendCount").descending()).and(Sort.by("id").descending()));
         popularPosts(pageable);
     }
-
-//    // 스크랩 많은 순서로 정렬
-//    @Transactional(readOnly = true)
-//    public List<PostsListResponseDto> findOrderByScrapCountDescIdDesc() {
-//        return postsRepository.findOrderByScrapCountDescIdDesc().stream()
-//                .map(PostsListResponseDto::new)
-//                .collect(Collectors.toList());
-//    }
-
 }

@@ -2,6 +2,7 @@ package com.ahreumvitsnowflake.graduation.springboot.domain.posts;
 
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,12 +13,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PostsRepository extends JpaRepository<Posts, Long> {
+    // 전체 게시글 조회
     @Query("SELECT p FROM Posts p ORDER BY p.id DESC")
     List<Posts> findAllDesc();
 
-    // 스크랩 많은 순서로 정렬
-    @Query("SELECT p FROM Posts p ORDER BY p.scrapCount DESC, p.id DESC ")
-    List<Posts> findOrderByScrapCountDescIdDesc();
+    // 전체 글 페이징 처리해서 조회
+    @Query("SELECT p FROM Posts p")
+    Page<PostsListResponseDto> findPageAllDesc(Pageable pageable);
 
     @Modifying
     @Query("UPDATE Posts SET viewCount = viewCount + 1 WHERE id = :id")
@@ -35,24 +37,24 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     List<PostsListResponseDto> findByUser(@Param("user") User user);
 
     @Query("SELECT p FROM Posts p WHERE category = :category")
-    List<PostsListResponseDto> findByCondition(@Param("category") Category category);
+    Page<PostsListResponseDto> findByCondition(Pageable pageable, @Param("category") Category category);
 
     @Query("SELECT p FROM Posts p WHERE phraseTopic = :phraseTopic")
-    List<PostsListResponseDto> findByPhraseTopic(@Param("phraseTopic") PhraseTopic phraseTopic);
+    Page<PostsListResponseDto> findByPhraseTopic(Pageable pageable, @Param("phraseTopic") PhraseTopic phraseTopic);
 
     @Query("SELECT p FROM Posts p WHERE category = :category AND phraseTopic = :phraseTopic")
-    List<PostsListResponseDto> findByConditionAndPhraseTopic(@Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
+    Page<PostsListResponseDto> findByConditionAndPhraseTopic(Pageable pageable, @Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
+//
+//    @Query("SELECT p FROM Posts p WHERE category = :category ORDER BY p.scrapCount DESC, p.id DESC")
+//    List<PostsListResponseDto> findByConditionOrderByScrapCountDescIdDesc(@Param("category") Category category);
+//
+//    @Query("SELECT p FROM Posts p WHERE phraseTopic = :phraseTopic ORDER BY p.scrapCount DESC, p.id DESC")
+//    List<PostsListResponseDto> findByPhraseTopicOrderByScrapCountDescIdDesc(@Param("phraseTopic") PhraseTopic phraseTopic);
+//
+//    @Query("SELECT p FROM Posts p WHERE category = :category AND phraseTopic = :phraseTopic ORDER BY p.scrapCount DESC, p.id DESC")
+//    List<PostsListResponseDto> findByConditionAndPhraseTopicOrderByScrapCountDescIdDesc(@Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
 
-    @Query("SELECT p FROM Posts p WHERE category = :category ORDER BY p.scrapCount DESC, p.id DESC")
-    List<PostsListResponseDto> findByConditionOrderByScrapCountDescIdDesc(@Param("category") Category category);
-
-    @Query("SELECT p FROM Posts p WHERE phraseTopic = :phraseTopic ORDER BY p.scrapCount DESC, p.id DESC")
-    List<PostsListResponseDto> findByPhraseTopicOrderByScrapCountDescIdDesc(@Param("phraseTopic") PhraseTopic phraseTopic);
-
-    @Query("SELECT p FROM Posts p WHERE category = :category AND phraseTopic = :phraseTopic ORDER BY p.scrapCount DESC, p.id DESC")
-    List<PostsListResponseDto> findByConditionAndPhraseTopicOrderByScrapCountDescIdDesc(@Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
-
-    Slice<Posts> findSliceBy(Pageable pageable);
+    // Page<Posts> findSliceBy(Pageable pageable);
 
     @Modifying
     @Query("UPDATE Posts SET recommendCount = recommendCount + 1 WHERE id = :id")
@@ -81,9 +83,4 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     // 일주일 간 인기글 Top 5 조회
     @Query("SELECT p FROM Posts p WHERE createdDate >= :startDate AND createdDate <= :endDate ORDER BY p.scrapCount DESC, p.recommendCount DESC, p.id DESC")
     Slice<Posts> findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(Pageable pageable, @Param("startDate") String startDate, @Param("endDate") String endDate);
-
-//    // 일주일 간 인기글 Top 5 조회
-//    @Query("SELECT p FROM Posts p WHERE createdDate >= :startDate AND createdDate <= :endDate ORDER BY p.scrapCount DESC, p.recommendCount DESC, p.id DESC")
-//    Slice<Posts> findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(Pageable pageable, @Param("startDate") String startDate, @Param("endDate") String endDate);
-
 }
