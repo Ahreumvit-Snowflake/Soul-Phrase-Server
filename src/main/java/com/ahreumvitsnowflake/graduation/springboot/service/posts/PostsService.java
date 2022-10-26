@@ -6,6 +6,7 @@ import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PostsRepository;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.UserRepository;
+import com.ahreumvitsnowflake.graduation.springboot.service.scrap.ScrapService;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsResponseDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsSaveRequestDto;
@@ -164,7 +165,7 @@ public class PostsService {
         }
     }
 
-    // 일주일 간 인기글 Top 5 조회
+    // 일주일 간 인기글 Top 10 조회
     @Transactional
     public Slice<PostsListResponseDto> popularPosts(Pageable pageable) {
         // 현재 시간
@@ -179,8 +180,8 @@ public class PostsService {
         String startDate = sevenDaysAgo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         //String startDate = fiveMinutesAgo.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        Slice<Posts> postsSlice = postsRepository.findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(pageable, startDate, endDate);
-        log.info("{}부터 {} 사이 인기글 Top 5 조회", startDate, endDate);
+        Slice<Posts> postsSlice = postsRepository.findTop10ByOrderByScrapCountDescRecommendCountDescIdDesc(pageable, startDate, endDate);
+        log.info("{}부터 {} 사이 인기글 Top 10 조회", startDate, endDate);
         return postsSlice.map(PostsListResponseDto::new);
     }
 

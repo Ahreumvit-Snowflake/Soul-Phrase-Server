@@ -1,9 +1,7 @@
 package com.ahreumvitsnowflake.graduation.springboot.domain.scrap;
 
-import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Category;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.Posts;
 import com.ahreumvitsnowflake.graduation.springboot.domain.user.User;
-import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.ScrapDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

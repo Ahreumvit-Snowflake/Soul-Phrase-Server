@@ -23,6 +23,8 @@ public class RecommendDto {
     private Long writerId;
     private String postsModifiedDate;
 
+    private String recommendDate;
+
     public RecommendDto(Recommend entity){
         this.recommendId = entity.getId();
         this.postId = entity.getPosts().getId();
@@ -37,5 +39,6 @@ public class RecommendDto {
         this.dislikeCount = entity.getPosts().getDislikeCount();
         this.writerId = entity.getPosts().getUser().getId();
         this.postsModifiedDate = entity.getPosts().getModifiedDate();
+        this.recommendDate = entity.getModifiedDate();
     }
 }
