@@ -103,7 +103,7 @@ public class PostsApiController {
         return postsService.findByConditions(pageable, category, phraseTopic);
     }
 
-    // 일주일 간 인기글 Top 5 조회
+    // 일주일 간 인기글 Top 10 조회
     @GetMapping("/api/v1/posts/popular/week")
     public List<PostsListResponseDto> getPostsOrderByPopular(@PageableDefault()
                                                              @SortDefault.SortDefaults({

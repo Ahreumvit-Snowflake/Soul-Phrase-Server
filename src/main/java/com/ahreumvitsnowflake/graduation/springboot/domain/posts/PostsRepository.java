@@ -44,17 +44,6 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
 
     @Query("SELECT p FROM Posts p WHERE category = :category AND phraseTopic = :phraseTopic")
     Page<PostsListResponseDto> findByConditionAndPhraseTopic(Pageable pageable, @Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
-//
-//    @Query("SELECT p FROM Posts p WHERE category = :category ORDER BY p.scrapCount DESC, p.id DESC")
-//    List<PostsListResponseDto> findByConditionOrderByScrapCountDescIdDesc(@Param("category") Category category);
-//
-//    @Query("SELECT p FROM Posts p WHERE phraseTopic = :phraseTopic ORDER BY p.scrapCount DESC, p.id DESC")
-//    List<PostsListResponseDto> findByPhraseTopicOrderByScrapCountDescIdDesc(@Param("phraseTopic") PhraseTopic phraseTopic);
-//
-//    @Query("SELECT p FROM Posts p WHERE category = :category AND phraseTopic = :phraseTopic ORDER BY p.scrapCount DESC, p.id DESC")
-//    List<PostsListResponseDto> findByConditionAndPhraseTopicOrderByScrapCountDescIdDesc(@Param("category") Category category, @Param("phraseTopic") PhraseTopic phraseTopic);
-
-    // Page<Posts> findSliceBy(Pageable pageable);
 
     @Modifying
     @Query("UPDATE Posts SET recommendCount = recommendCount + 1 WHERE id = :id")
@@ -82,5 +71,9 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
 
     // 일주일 간 인기글 Top 5 조회
     @Query("SELECT p FROM Posts p WHERE createdDate >= :startDate AND createdDate <= :endDate ORDER BY p.scrapCount DESC, p.recommendCount DESC, p.id DESC")
-    Slice<Posts> findTop5ByOrderByScrapCountDescRecommendCountDescIdDesc(Pageable pageable, @Param("startDate") String startDate, @Param("endDate") String endDate);
+    Slice<Posts> findTop10ByOrderByScrapCountDescRecommendCountDescIdDesc(Pageable pageable, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    // 글귀 추천
+    @Query("SELECT p FROM Posts p WHERE phraseTopic = :phraseTopic AND createdDate >= :startDate AND createdDate <= :endDate ORDER BY p.scrapCount DESC, p.recommendCount DESC, p.id DESC")
+    Page<Posts> findTop5ByPhraseTopicOrderByScrapCountDescRecommendCountDescIdDesc(Pageable pageable, @Param("phraseTopic") PhraseTopic phraseTopic, @Param("startDate") String startDate, @Param("endDate") String endDate);
 }

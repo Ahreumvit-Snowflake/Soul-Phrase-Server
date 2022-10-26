@@ -22,6 +22,7 @@ public class ScrapDto {
     private int recommendCount;
     private int dislikeCount;
 
+    private String scrapDate;
     public ScrapDto(Scrap entity){
         this.scrapId = entity.getId();
         this.postId = entity.getPosts().getId();
@@ -36,5 +37,6 @@ public class ScrapDto {
         this.dislikeCount = entity.getPosts().getDislikeCount();
         this.writerId = entity.getPosts().getUser().getId();
         this.postsModifiedDate = entity.getPosts().getModifiedDate();
+        this.scrapDate = entity.getModifiedDate();
     }
 }
