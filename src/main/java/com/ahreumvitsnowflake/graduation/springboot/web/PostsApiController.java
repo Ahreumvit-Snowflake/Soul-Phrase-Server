@@ -77,23 +77,23 @@ public class PostsApiController {
         return postsService.pageList(pageable);
     }
 
-    // 최신순 4개씩 조회 - category 선택 포함
+    // 최신순 20개씩 조회 - category 선택 포함
     @GetMapping("/api/v1/posts/condition")
-    public Page<PostsListResponseDto> getPostsCondition (@PageableDefault(size=4, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Category category) {
+    public Page<PostsListResponseDto> getPostsCondition (@PageableDefault(size=20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Category category) {
         log.info("category : {}", category);
         return postsService.findByCondition(pageable, category);
     }
 
-    // 카테고리별/주제별 최신순 4개씩 조회 API
+    // 카테고리별/주제별 최신순 20개씩 조회 API
     @GetMapping("/api/v1/posts/order/recent")
-    public Page<PostsListResponseDto> getPostsConditions (@PageableDefault(size=4, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Category category, PhraseTopic phraseTopic) {
+    public Page<PostsListResponseDto> getPostsConditions (@PageableDefault(size=20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable, Category category, PhraseTopic phraseTopic) {
         log.info("category : {}, phraseTopic : {}", category, phraseTopic);
         return postsService.findByConditions(pageable, category, phraseTopic);
     }
 
-    // 카테고리별/주제별 스크랩순 4개씩 조회 API
+    // 카테고리별/주제별 스크랩순 20개씩 조회 API
     @GetMapping("/api/v1/posts/order/scrap")
-    public Page<PostsListResponseDto> getPostsOrderByScrap(@PageableDefault(size = 4)
+    public Page<PostsListResponseDto> getPostsOrderByScrap(@PageableDefault(size = 20)
                                                                @SortDefault.SortDefaults({
                                                                        @SortDefault(sort="scrapCount", direction = Sort.Direction.DESC),
                                                                        @SortDefault(sort="id", direction = Sort.Direction.DESC)
@@ -105,7 +105,7 @@ public class PostsApiController {
 
     // 일주일 간 인기글 Top 5 조회
     @GetMapping("/api/v1/posts/popular/week")
-    public List<PostsListResponseDto> getPostsOrderByPopular(@PageableDefault(size = 5)
+    public List<PostsListResponseDto> getPostsOrderByPopular(@PageableDefault()
                                                              @SortDefault.SortDefaults({
                                                                      @SortDefault(sort="scrapCount", direction = Sort.Direction.DESC),
                                                                      @SortDefault(sort="recommendCount", direction = Sort.Direction.DESC),
