@@ -36,17 +36,18 @@ public class RecommendationsApiController {
                                                                            }) Pageable pageable, @LoginUser SessionUser user
     ) {
         List<PostsListResponseDto> recommendationsList = null;
+        Pageable pageable2 = PageRequest.of(0, 4, Sort.by("recommendCount").descending().and(Sort.by("id").descending()));
         if (user != null) {
             PhraseTopic phraseTopic = recommendationsService.userScrappedPhraseTopic(user.getId());
             log.info("phraseTopic 출력 형태 : {}", phraseTopic);
             if (phraseTopic == null) {
                 log.info("사용자가 선호한 phraseTopic이 없습니다.");
+                recommendationsList = postsService.pageList(pageable2).getContent();
             } else {
                 recommendationsList = recommendationsService.contentsBasedRecommendations(pageable, phraseTopic).getContent();
             }
         }
         else{
-            Pageable pageable2 = PageRequest.of(0, 4, Sort.by("recommendCount").descending().and(Sort.by("id").descending()));
             recommendationsList = postsService.pageList(pageable2).getContent();
         }
         return recommendationsList;
