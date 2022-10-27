@@ -3,11 +3,13 @@ package com.ahreumvitsnowflake.graduation.springboot.web;
 import com.ahreumvitsnowflake.graduation.springboot.config.auth.LoginUser;
 import com.ahreumvitsnowflake.graduation.springboot.config.auth.dto.SessionUser;
 import com.ahreumvitsnowflake.graduation.springboot.domain.posts.PhraseTopic;
+import com.ahreumvitsnowflake.graduation.springboot.service.posts.PostsService;
 import com.ahreumvitsnowflake.graduation.springboot.service.recommendations.RecommendationsService;
 import com.ahreumvitsnowflake.graduation.springboot.web.dto.PostsListResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class RecommendationsApiController {
     private final RecommendationsService recommendationsService;
+    private final PostsService postsService;
     
     // 글귀 추천
     @GetMapping("/api/v1/recommendations")
@@ -39,6 +42,10 @@ public class RecommendationsApiController {
             } else {
                 recommendationsList = recommendationsService.contentsBasedRecommendations(pageable, phraseTopic);
             }
+        }
+        else{
+            Pageable pageable2 = PageRequest.of(0, 4, Sort.by("recommendCount").descending().and(Sort.by("id").descending()));
+            recommendationsList = postsService.pageList(pageable2);
         }
         return recommendationsList;
     }
