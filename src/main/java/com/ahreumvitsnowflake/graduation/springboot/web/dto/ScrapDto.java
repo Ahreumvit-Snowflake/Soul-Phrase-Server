@@ -28,7 +28,7 @@ public class ScrapDto {
         this.postId = entity.getPosts().getId();
         this.category = entity.getPosts().getCategory();
         this.phraseTopic = entity.getPosts().getPhraseTopic();
-        this.writer = entity.getUser().getNickname();
+        this.writer = entity.getPosts().getUser().getNickname();
         this.phrase = entity.getPosts().getPhrase();
         this.scrapCount = entity.getPosts().getScrapCount();
         this.source = entity.getPosts().getSource();
