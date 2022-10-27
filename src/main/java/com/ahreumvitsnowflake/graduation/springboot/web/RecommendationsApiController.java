@@ -17,6 +17,8 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -26,26 +28,26 @@ public class RecommendationsApiController {
     
     // 글귀 추천
     @GetMapping("/api/v1/recommendations")
-    public Page<PostsListResponseDto> getPostsContentsBasedRecommendations(@PageableDefault(size = 4)
+    public List<PostsListResponseDto> getPostsContentsBasedRecommendations(@PageableDefault(size = 4)
                                                                            @SortDefault.SortDefaults({
                                                                                    @SortDefault(sort="scrapCount", direction = Sort.Direction.DESC),
                                                                                    @SortDefault(sort="recommendCount", direction = Sort.Direction.DESC),
                                                                                    @SortDefault(sort="id", direction = Sort.Direction.DESC)
                                                                            }) Pageable pageable, @LoginUser SessionUser user
     ) {
-        Page<PostsListResponseDto> recommendationsList = null;
+        List<PostsListResponseDto> recommendationsList = null;
         if (user != null) {
             PhraseTopic phraseTopic = recommendationsService.userScrappedPhraseTopic(user.getId());
             log.info("phraseTopic 출력 형태 : {}", phraseTopic);
             if (phraseTopic == null) {
                 log.info("사용자가 선호한 phraseTopic이 없습니다.");
             } else {
-                recommendationsList = recommendationsService.contentsBasedRecommendations(pageable, phraseTopic);
+                recommendationsList = recommendationsService.contentsBasedRecommendations(pageable, phraseTopic).getContent();
             }
         }
         else{
             Pageable pageable2 = PageRequest.of(0, 4, Sort.by("recommendCount").descending().and(Sort.by("id").descending()));
-            recommendationsList = postsService.pageList(pageable2);
+            recommendationsList = postsService.pageList(pageable2).getContent();
         }
         return recommendationsList;
     }
