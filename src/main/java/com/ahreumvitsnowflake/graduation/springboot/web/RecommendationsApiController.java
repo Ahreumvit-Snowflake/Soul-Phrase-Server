@@ -23,7 +23,7 @@ public class RecommendationsApiController {
     
     // 글귀 추천
     @GetMapping("/api/v1/recommendations")
-    public Page<PostsListResponseDto> getPostsContentsBasedRecommendations(@PageableDefault(size = 5)
+    public Page<PostsListResponseDto> getPostsContentsBasedRecommendations(@PageableDefault(size = 4)
                                                                            @SortDefault.SortDefaults({
                                                                                    @SortDefault(sort="scrapCount", direction = Sort.Direction.DESC),
                                                                                    @SortDefault(sort="recommendCount", direction = Sort.Direction.DESC),
