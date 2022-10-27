@@ -41,6 +41,7 @@ public class RecommendationsService {
         ArrayList<PhraseTopic> phraseTopicsList = new ArrayList<>();
         if (scrapPosts.size() == 0 && recommendPosts.size() == 0) {
             log.info("사용자가 스크랩한 게시글, 추천한 게시글이 없습니다.");
+            return null;
         }
         if(scrapPosts.size() != 0){
             for (ScrapDto scrapDto : scrapPosts) {
